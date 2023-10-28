@@ -1,4 +1,4 @@
-namespace VkApi;
+namespace Vk.Api;
 
 public class Program
 {

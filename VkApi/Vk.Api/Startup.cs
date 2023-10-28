@@ -1,6 +1,8 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Vk.Data.Context;
 
-namespace VkApi;
+namespace Vk.Api;
 
 
 public class Startup
@@ -15,6 +17,10 @@ public class Startup
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
+        // Database için bağlantı kodları
+        string connection = Configuration.GetConnectionString("MsSqlConnection");
+        services.AddDbContext<VkDbContext>(opts => opts.UseSqlServer(connection));
+        
         services.AddControllers();
         services.AddSwaggerGen(c =>
         {
