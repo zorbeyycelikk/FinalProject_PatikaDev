@@ -12,5 +12,15 @@ public class MapperConfig : Profile
         CreateMap<UpdateCustomerRequest, Customer>();
         CreateMap<Customer, CustomerResponse>();
         
+        CreateMap<CreateOrderRequest, Order>();
+        CreateMap<UpdateOrderRequest, Order>();
+        CreateMap<Order, OrderResponse>()
+            .ForMember(x => x.CustomerName, opt => opt
+                .MapFrom(src => src.Customer.Name));
+        
+        CreateMap<CreateProductRequest, Product>();
+        CreateMap<UpdateProductRequest, Product>();
+        CreateMap<Product, ProductResponse>();
+        
     }
 }

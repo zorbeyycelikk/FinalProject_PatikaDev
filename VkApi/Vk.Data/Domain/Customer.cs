@@ -9,7 +9,7 @@ namespace Vk.Data.Domain;
 [Table("Customer", Schema = "dbo")]
 public class Customer : BaseModel
 {
-    public int   CustomerNumber { get; set; }
+    public string CustomerNumber { get; set; }
     public string Name  { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
