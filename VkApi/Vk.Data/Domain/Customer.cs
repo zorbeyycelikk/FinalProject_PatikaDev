@@ -1,18 +1,20 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Vk.Base.Model;
+using Vk.Base;
+
 
 namespace Vk.Data.Domain;
 
 [Table("Customer", Schema = "dbo")]
 public class Customer : BaseModel
 {
+    public int   CustomerNumber { get; set; }
     public string Name  { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
     
-    public virtual ICollection<Order>Orders { get; set; } 
+    public virtual ICollection<Order> Orders { get; set; } 
 }
 class CustomerConfigruration : IEntityTypeConfiguration<Customer>
 {
@@ -22,9 +24,13 @@ class CustomerConfigruration : IEntityTypeConfiguration<Customer>
         builder.Property(x => x.UpdateDate).IsRequired(false);
         builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
         
-        builder.Property(x => x.Id).IsRequired();
         builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Email).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Phone).IsRequired().HasMaxLength(50);
+        
+        builder.HasMany(x => x.Orders)
+            .WithOne(x => x.Customer)
+            .HasForeignKey(x => x.CustomerId)
+            .IsRequired(true);
     }
 }
