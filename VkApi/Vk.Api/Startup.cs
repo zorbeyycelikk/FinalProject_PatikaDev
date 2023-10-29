@@ -1,7 +1,12 @@
+using System.Reflection;
+using AutoMapper;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Vk.Data.Context;
 using Vk.Data.Uow;
+using Vk.Operation.Cqrs;
+using Vk.Operation.Mapper;
 
 namespace Vk.Api;
 
@@ -25,7 +30,13 @@ public class Startup
         // UnitOfWork Scoped
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+        // Mapper Configuration
+        var config = new MapperConfiguration(cfg => { cfg.AddProfile(new MapperConfig()); });
+        services.AddSingleton(config.CreateMapper());
         
+        //MediatR
+        services.AddMediatR(typeof(GetAllCustomerQuery).GetTypeInfo().Assembly);
+
         services.AddControllers();
         services.AddSwaggerGen(c =>
         {
