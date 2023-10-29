@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Vk.Base.Model;
 using Vk.Data.Domain;
 
 namespace Vk.Data.Context;

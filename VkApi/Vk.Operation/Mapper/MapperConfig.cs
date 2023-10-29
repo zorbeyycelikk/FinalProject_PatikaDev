@@ -8,8 +8,9 @@ public class MapperConfig : Profile
 {
     public MapperConfig()
     {
-        CreateMap<CustomerCreateRequest, Customer>();
-        CreateMap<CustomerUpdateRequest, Customer>();
+        CreateMap<CreateCustomerRequest, Customer>();
+        CreateMap<UpdateCustomerRequest, Customer>();
         CreateMap<Customer, CustomerResponse>();
+        
     }
 }
