@@ -17,9 +17,9 @@ public class UnitOfWork : IUnitOfWork
         ProductRepository = new GenericRepository<Product>(dbContext);
     }
 
-    public void SaveAsync()
+    public void Save()
     {
-        dbContext.SaveChangesAsync();
+        dbContext.SaveChanges();
     }
 
     public IGenericRepository<Customer> CustomerRepository { get; }
