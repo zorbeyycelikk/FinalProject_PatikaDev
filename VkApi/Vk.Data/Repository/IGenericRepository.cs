@@ -6,13 +6,13 @@ namespace Vk.Data.Repository;
 public interface IGenericRepository<TEntity> where TEntity : BaseModel
 {
     // Read Operations
-    IQueryable<TEntity> GetAll(); // TEntity'nin elemanlarını barındıran bir list döner.
+    IQueryable<TEntity> GetAll(bool tracking = true); // TEntity'nin elemanlarını barındıran bir list döner.
 
-    IQueryable<TEntity> GetWhere(Expression<Func<TEntity, bool>> method); //
+    IQueryable<TEntity> GetWhere(Expression<Func<TEntity, bool>> method , bool tracking = true); //
 
-    Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> method); //
+    Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> method , bool tracking = true); //
 
-    Task<TEntity> GetByIdAsync(int id);
+    Task<TEntity> GetByIdAsync(string id,bool tracking = true);
     
     // Write Operations
 
@@ -22,7 +22,7 @@ public interface IGenericRepository<TEntity> where TEntity : BaseModel
     
     Task<bool> Remove(TEntity entity);
     
-    Task<bool> Remove(int id);
+    Task<bool> Remove(string id);
     
     bool RemoveRange(List<TEntity> entities);
     

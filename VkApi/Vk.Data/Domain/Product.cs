@@ -1,16 +1,18 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Vk.Base.Model;
 
 namespace Vk.Data.Domain;
 
+[Table("Product", Schema = "dbo")]
 public class Product : BaseModel
 {
     public string Name { get; set; }
     public int Stock   { get; set; }
-    public long Price  { get; set; }
+    public float Price  { get; set; }
     
-    public ICollection<Order> Orders { get; set; }
+    public virtual ICollection<Order> Orders { get; set; }
 
 }
 
@@ -18,8 +20,6 @@ class ProductConfigruration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.Property(x => x.InsertUserId).IsRequired();
-        builder.Property(x => x.UpdateUserId).IsRequired().HasDefaultValue(0);
         builder.Property(x => x.InsertDate).IsRequired();
         builder.Property(x => x.UpdateDate).IsRequired(false);
         builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);

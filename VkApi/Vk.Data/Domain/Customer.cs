@@ -12,14 +12,12 @@ public class Customer : BaseModel
     public string Email { get; set; }
     public string Phone { get; set; }
     
-    public ICollection<Order>Orders { get; set; } 
+    public virtual ICollection<Order>Orders { get; set; } 
 }
 class CustomerConfigruration : IEntityTypeConfiguration<Customer>
 {
     public void Configure(EntityTypeBuilder<Customer> builder)
     {
-        builder.Property(x => x.InsertUserId).IsRequired();
-        builder.Property(x => x.UpdateUserId).IsRequired().HasDefaultValue(0);
         builder.Property(x => x.InsertDate).IsRequired();
         builder.Property(x => x.UpdateDate).IsRequired(false);
         builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);

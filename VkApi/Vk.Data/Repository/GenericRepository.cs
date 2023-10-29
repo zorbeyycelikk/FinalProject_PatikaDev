@@ -19,30 +19,54 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     
     // Read Operations
     
-    public IQueryable<TEntity> GetAll()
+    public IQueryable<TEntity> GetAll(bool tracking = true)
     {
-        return Table;
+        var query = Table.AsQueryable();
+        if (!tracking) // tracking == false
+        {
+           query = query.AsNoTracking();
+        }
+        return query;
     }
 
-    public IQueryable<TEntity> GetWhere(Expression<Func<TEntity, bool>> method)
+    public IQueryable<TEntity> GetWhere(Expression<Func<TEntity, bool>> method,bool tracking = true)
     {
-        return Table.Where(method);
+        var query = Table.Where(method);
+        if (!tracking) // tracking == false
+        {
+            query = query.AsNoTracking();
+        }
+        return query;
     }
 
-    public async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> method)
+    public async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> method,bool tracking = true)
     {
-        return await Table.FirstOrDefaultAsync(method);
+        var query = Table.AsQueryable();
+        if (!tracking) // tracking == false
+        {
+            query = query.AsNoTracking();
+        }
+        return await query.FirstOrDefaultAsync(method);
     }
-
-    public async Task<TEntity> GetByIdAsync(int id)
+    
+    public async Task<TEntity> GetByIdAsync(string id,bool tracking = true)
     {
-        return await Table.FindAsync(id);
+        
+        var query = Table.AsQueryable();
+        
+        if (!tracking) // tracking == false
+        {
+            query = query.AsNoTracking();
+        }
+        
+        return await query.FirstOrDefaultAsync(x => x.Id == Guid.Parse(id));
     }
     
     // Write Operations
 
     public async Task<TEntity> AddAsync(TEntity entity)
     {
+        entity.InsertDate = DateTime.UtcNow;
         var response = await Table.AddAsync(entity);
         return response.Entity;
     }
@@ -51,7 +75,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         entities.ForEach(x =>
         {
-            x.InsertUserId = 9999; // admin Id
             x.InsertDate = DateTime.UtcNow;
             x.IsActive = true;
         });
@@ -61,20 +84,15 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
     public async Task<bool> Remove(TEntity entity)
     {
-        entity.UpdateUserId = 9999; // admin Id
-        entity.UpdateDate = DateTime.UtcNow;
         entity.IsActive = false;
-        
         var response =Table.Update(entity);
         return response.State == EntityState.Modified;
     }
 
-    public async Task<bool> Remove(int id)
+    public async Task<bool> Remove(string id)
     {
-        var entity = await Table.FindAsync(id);
+        var entity = await Table.FindAsync(Guid.Parse(id));
         
-        entity.UpdateUserId = 9999; // admin Id
-        entity.UpdateDate = DateTime.UtcNow;
         entity.IsActive = false;
         
         var response =Table.Update(entity);
@@ -85,16 +103,17 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         entities.ForEach(x =>
         {
-            x.UpdateUserId = 9999; // admin Id
             x.UpdateDate = DateTime.UtcNow;
             x.IsActive = false;
         });
+        
         Table.UpdateRange(entities);
         return true;
     }
 
     public bool Update(TEntity entity)
     {
+        entity.UpdateDate = DateTime.UtcNow;
         var response = Table.Update(entity);
         return response.State == EntityState.Modified;
     }
