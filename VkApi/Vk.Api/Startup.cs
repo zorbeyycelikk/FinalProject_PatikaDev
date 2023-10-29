@@ -1,5 +1,6 @@
 using System.Reflection;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -7,6 +8,7 @@ using Vk.Data.Context;
 using Vk.Data.Uow;
 using Vk.Operation.Cqrs;
 using Vk.Operation.Mapper;
+using Vk.Operation.Validation;
 
 namespace Vk.Api;
 
@@ -37,6 +39,12 @@ public class Startup
         //MediatR
         services.AddMediatR(typeof(GetAllCustomerQuery).GetTypeInfo().Assembly);
 
+        // FluentValidation
+        services.AddControllers().AddFluentValidation(x =>
+        {
+            x.RegisterValidatorsFromAssemblyContaining<BaseValidator>();
+        });
+        
         services.AddControllers();
         services.AddSwaggerGen(c =>
         {
