@@ -15,6 +15,9 @@ public class UnitOfWork : IUnitOfWork
         CustomerRepository = new GenericRepository<Customer>(dbContext);
         OrderRepository = new GenericRepository<Order>(dbContext);
         ProductRepository = new GenericRepository<Product>(dbContext);
+        AccountRepository = new GenericRepository<Account>(dbContext);
+        CardRepository = new GenericRepository<Card>(dbContext);
+
     }
 
     public void Save()
@@ -25,4 +28,7 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<Customer> CustomerRepository { get; }
     public IGenericRepository<Order> OrderRepository { get; }
     public IGenericRepository<Product> ProductRepository { get; }
+    public IGenericRepository<Account> AccountRepository { get; }
+    public IGenericRepository<Card> CardRepository { get; }
+
 }

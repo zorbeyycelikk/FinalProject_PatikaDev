@@ -22,5 +22,14 @@ public class MapperConfig : Profile
         CreateMap<UpdateProductRequest, Product>();
         CreateMap<Product, ProductResponse>();
         
+        CreateMap<CreateCardRequest, Card>();
+        CreateMap<UpdateCardRequest, Card>();
+        CreateMap<Card, CardResponse>()
+            .ForMember(x => x.CardHolderNumber, opt => opt
+                .MapFrom(src => src.Account.CustomerNumber));
+        
+        CreateMap<CreateAccountRequest, Account>();
+        CreateMap<UpdateAccountRequest, Account>();
+        CreateMap<Account, AccountResponse>();
     }
 }

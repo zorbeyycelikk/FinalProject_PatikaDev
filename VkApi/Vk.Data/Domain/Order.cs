@@ -12,7 +12,9 @@ public class Order : BaseModel
     public string   OrderNumber      { get; set; }
     public string   Description      { get; set; }
     public string   Address          { get; set; }
-    public int      CustomerId   { get; set; }
+    public string   Status           { get; set; }
+    
+    public string   CustomerNumber   { get; set; }
     public Customer Customer         { get; set; }
     
     public virtual ICollection<Product> Products { get; set; }
@@ -29,8 +31,7 @@ class OrderConfigruration : IEntityTypeConfiguration<Order>
         builder.Property(x => x.OrderNumber).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Description).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Address).IsRequired().HasMaxLength(50);
-        builder.Property(x => x.CustomerId).IsRequired(true);
-
-        
+        builder.Property(x => x.Address).IsRequired().HasMaxLength(50);
+        builder.Property(x => x.CustomerNumber).IsRequired(true);
     }
 }

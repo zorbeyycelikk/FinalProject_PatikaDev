@@ -11,6 +11,11 @@ public class CreateCustomerValidator: AbstractValidator<CreateCustomerRequest>
         RuleFor(x => x.Email).NotEmpty().MaximumLength(50);
         RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
         RuleFor(x => x.Phone).NotEmpty().MaximumLength(50);
+        RuleFor(x => x.Password).NotEmpty();
+        RuleFor(x => x.Profit)
+            .NotEmpty().WithMessage("Profit cannot be empty.")
+            .GreaterThanOrEqualTo(0).WithMessage("Profit must be greater than or equal to 0.")
+            .LessThan(100).WithMessage("Profit must be less than 100.");
     }
 }
 
@@ -21,5 +26,10 @@ public class UpdateCustomerValidator: AbstractValidator<UpdateCustomerRequest>
         RuleFor(x => x.Email).NotEmpty().MaximumLength(50);
         RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
         RuleFor(x => x.Phone).NotEmpty().MaximumLength(50);
+        RuleFor(x => x.Password).NotEmpty();
+        RuleFor(x => x.Profit)
+            .NotEmpty().WithMessage("Profit cannot be empty.")
+            .GreaterThanOrEqualTo(0).WithMessage("Profit must be greater than or equal to 0.")
+            .LessThan(100).WithMessage("Profit must be less than 100.");        
     }
 }

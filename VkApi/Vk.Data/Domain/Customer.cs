@@ -13,8 +13,11 @@ public class Customer : BaseModel
     public string Name  { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
+    public string Password { get; set; }
+    public float  Profit { get; set; }
     
     public virtual ICollection<Order> Orders { get; set; } 
+    public virtual ICollection<Account> Accounts { get; set; }  
 }
 class CustomerConfigruration : IEntityTypeConfiguration<Customer>
 {
@@ -24,13 +27,24 @@ class CustomerConfigruration : IEntityTypeConfiguration<Customer>
         builder.Property(x => x.UpdateDate).IsRequired(false);
         builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
         
+        builder.Property(x => x.CustomerNumber).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Email).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Phone).IsRequired().HasMaxLength(50);
+        builder.Property(x => x.Password).IsRequired();
+        builder.Property(x => x.Profit).IsRequired().HasDefaultValue(0);
+
         
-        builder.HasMany(x => x.Orders)
-            .WithOne(x => x.Customer)
-            .HasForeignKey(x => x.CustomerId)
+        builder.HasMany(c => c.Orders)
+            .WithOne(a => a.Customer)
+            .HasForeignKey(a => a.CustomerNumber)
+            .HasPrincipalKey(c => c.CustomerNumber)
+            .IsRequired(true);
+        
+        builder.HasMany(c => c.Accounts)
+            .WithOne(a => a.Customer)
+            .HasForeignKey(a => a.CustomerNumber)
+            .HasPrincipalKey(c => c.CustomerNumber)
             .IsRequired(true);
     }
 }

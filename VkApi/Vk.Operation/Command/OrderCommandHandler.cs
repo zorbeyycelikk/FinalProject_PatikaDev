@@ -48,6 +48,7 @@ public class OrderCommandHandler:
 
         entity.Address = request.Model.Address;
         entity.Description = request.Model.Description;
+        entity.Status = request.Model.Status;
         
         unitOfWork.OrderRepository.Update(entity);
         unitOfWork.Save();

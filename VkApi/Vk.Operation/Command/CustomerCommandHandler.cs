@@ -1,6 +1,7 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Vk.Base.Encryption;
 using Vk.Base.Response;
 using Vk.Data.Domain;
 using Vk.Data.Uow;
@@ -31,6 +32,9 @@ public class CustomerCommandHandler:
         {
             return new ApiResponse("Error");
         }
+
+        request.Model.Password = Md5.Create(request.Model.Password.ToUpper());
+        
         Customer mapped = mapper.Map<Customer>(request.Model);
         
         unitOfWork.CustomerRepository.AddAsync(mapped,cancellationToken);
@@ -50,6 +54,8 @@ public class CustomerCommandHandler:
         entity.Name = request.Model.Name;
         entity.Email = request.Model.Email;
         entity.Phone = request.Model.Phone;
+        entity.Password = request.Model.Password;
+        entity.Profit = request.Model.Profit;
         
         unitOfWork.CustomerRepository.Update(entity);
         unitOfWork.Save();

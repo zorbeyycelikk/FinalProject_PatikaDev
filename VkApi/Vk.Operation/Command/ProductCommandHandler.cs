@@ -49,6 +49,7 @@ public class ProductCommandHandler:
         entity.Name = request.Model.Name;
         entity.Price = request.Model.Price;
         entity.Stock = request.Model.Stock;
+        entity.Category = request.Model.Category;
         
         unitOfWork.ProductRepository.Update(entity);
         unitOfWork.Save();

@@ -10,6 +10,7 @@ public class Product : BaseModel
 {
     public string ProductNumber  { get; set; }
     public string Name           { get; set; }
+    public string Category       { get; set; }
     public int    Stock          { get; set; }
     public float  Price          { get; set; }
     
@@ -27,6 +28,6 @@ class ProductConfigruration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Stock).IsRequired().HasDefaultValue(0);
         builder.Property(x => x.Price).IsRequired().HasDefaultValue(0);
-        
+        builder.Property(x => x.Category).IsRequired().HasMaxLength(50);
     }
 }

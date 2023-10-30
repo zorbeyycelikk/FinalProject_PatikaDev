@@ -9,4 +9,7 @@ public interface IUnitOfWork
     IGenericRepository<Customer> CustomerRepository { get; }
     IGenericRepository<Order> OrderRepository { get; }
     IGenericRepository<Product> ProductRepository { get; }
+    IGenericRepository<Account> AccountRepository { get; }
+    IGenericRepository<Card> CardRepository { get; }
+
 }
