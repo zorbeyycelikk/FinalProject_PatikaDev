@@ -14,7 +14,7 @@ public class Product : BaseModel
     public int    Stock          { get; set; }
     public float  Price          { get; set; }
     
-    public virtual ICollection<Order> Orders { get; set; }
+    public virtual ICollection<OrderProduct> OrderProducts { get; set; }
 }
 
 class ProductConfigruration : IEntityTypeConfiguration<Product>
@@ -29,5 +29,11 @@ class ProductConfigruration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Stock).IsRequired().HasDefaultValue(0);
         builder.Property(x => x.Price).IsRequired().HasDefaultValue(0);
         builder.Property(x => x.Category).IsRequired().HasMaxLength(50);
+        
+        builder.HasMany(o => o.OrderProducts)
+            .WithOne(op => op.Product)
+            .HasForeignKey(op => op.ProductNumber )
+            .HasPrincipalKey(o => o.ProductNumber)
+            .IsRequired(true);
     }
 }

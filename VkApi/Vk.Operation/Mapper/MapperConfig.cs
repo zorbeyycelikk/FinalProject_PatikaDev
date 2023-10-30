@@ -1,4 +1,5 @@
 using AutoMapper;
+using Vk.Data;
 using Vk.Data.Domain;
 using Vk.Schema;
 
@@ -31,5 +32,12 @@ public class MapperConfig : Profile
         CreateMap<CreateAccountRequest, Account>();
         CreateMap<UpdateAccountRequest, Account>();
         CreateMap<Account, AccountResponse>();
+        
+        CreateMap<CreateOrderProductRequest, OrderProduct>();
+        CreateMap<OrderProduct, OrderProductResponse>()
+            .ForMember(x => x.CustomerNumberWhoCreateOrder, opt => opt
+                .MapFrom(src => src.Order.CustomerNumber))
+            .ForMember(x => x.ProductNameWhichCreatedInOrder, opt => opt
+                .MapFrom(src => src.Product.Name));
     }
 }

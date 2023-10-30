@@ -13,6 +13,7 @@ public class Customer : BaseModel
     public string Name  { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
+    public string Role  { get; set; } // admin or bayi  | default value bayi
     public string Password { get; set; }
     public float  Profit { get; set; }
     
@@ -31,6 +32,7 @@ class CustomerConfigruration : IEntityTypeConfiguration<Customer>
         builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Email).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Phone).IsRequired().HasMaxLength(50);
+        builder.Property(x => x.Role).IsRequired().HasMaxLength(5).HasDefaultValue("bayi");
         builder.Property(x => x.Password).IsRequired();
         builder.Property(x => x.Profit).IsRequired().HasDefaultValue(0);
 

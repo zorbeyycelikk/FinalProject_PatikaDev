@@ -6,6 +6,7 @@ public class CreateCustomerRequest
     public string Name  { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
+    public string Role  { get; set; } // admin or bayi  | default value bayi
     public string Password { get; set; }
     public float  Profit { get; set; }
 }
@@ -25,6 +26,7 @@ public class CustomerResponse
     public string Name  { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
+    public string Role  { get; set; } // admin or bayi  | default value bayi
     public float  Profit { get; set; }
 
 }
