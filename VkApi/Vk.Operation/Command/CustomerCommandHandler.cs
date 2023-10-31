@@ -50,11 +50,11 @@ public class CustomerCommandHandler:
         {
             return new ApiResponse("Error");
         }
-
+        
         entity.Name = request.Model.Name;
         entity.Email = request.Model.Email;
         entity.Phone = request.Model.Phone;
-        entity.Password = request.Model.Password;
+        entity.Password = Md5.Create(request.Model.Password.ToUpper());
         entity.Profit = request.Model.Profit;
         
         unitOfWork.CustomerRepository.Update(entity);
