@@ -8,6 +8,7 @@ public class CreateBasketItemRequest
 
 public class BasketItemResponse
 {
-    public string BasketNumber { get; set; }
     public string CustomerNumber { get; set; }
+    public string ProductNumber { get; set; }
+    public string ProductName { get; set; }
 }

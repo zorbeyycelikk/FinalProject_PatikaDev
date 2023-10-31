@@ -41,7 +41,9 @@ public class MapperConfig : Profile
         CreateMap<CreateBasketItemRequest, BasketItem>();
         CreateMap<BasketItem, BasketItemResponse>()
             .ForMember(x => x.CustomerNumber, opt => opt
-                .MapFrom(src => src.Basket.CustomerNumber));
+                .MapFrom(src => src.Basket.CustomerNumber))
+            .ForMember(x => x.ProductName, opt => opt
+                .MapFrom(src => src.Product.Name));
 
         // CreateMap<CreateOrderProductRequest, OrderProduct>();
         // CreateMap<OrderProduct, OrderProductResponse>()
