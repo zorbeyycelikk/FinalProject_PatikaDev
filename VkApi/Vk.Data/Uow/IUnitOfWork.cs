@@ -11,6 +11,9 @@ public interface IUnitOfWork
     IGenericRepository<Product> ProductRepository { get; }
     IGenericRepository<Account> AccountRepository { get; }
     IGenericRepository<Card> CardRepository { get; } 
-    IGenericRepository<OrderProduct> OrderProductRepository { get; }
+    IGenericRepository<Basket> BasketRepository { get; } 
+    IGenericRepository<BasketItem> BasketItemRepository { get; } 
+
+    // IGenericRepository<OrderProduct> OrderProductRepository { get; }
 
 }

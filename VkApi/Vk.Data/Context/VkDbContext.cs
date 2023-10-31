@@ -17,8 +17,10 @@ public class VkDbContext : DbContext
         modelBuilder.ApplyConfiguration(new ProductConfigruration());
         modelBuilder.ApplyConfiguration(new AccountConfigruration());
         modelBuilder.ApplyConfiguration(new CardConfigruration());
-
-    
+        
+        modelBuilder.ApplyConfiguration(new BasketConfigruration());
+        modelBuilder.ApplyConfiguration(new BasketItemConfigruration());
+        
         base.OnModelCreating(modelBuilder);
     }
 }

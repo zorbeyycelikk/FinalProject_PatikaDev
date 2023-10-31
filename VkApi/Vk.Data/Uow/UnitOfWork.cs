@@ -17,7 +17,10 @@ public class UnitOfWork : IUnitOfWork
         ProductRepository = new GenericRepository<Product>(dbContext);
         AccountRepository = new GenericRepository<Account>(dbContext);
         CardRepository = new GenericRepository<Card>(dbContext);
-        OrderProductRepository = new GenericRepository<OrderProduct>(dbContext);
+        BasketRepository = new GenericRepository<Basket>(dbContext);
+        BasketItemRepository = new GenericRepository<BasketItem>(dbContext);
+
+        // OrderProductRepository = new GenericRepository<OrderProduct>(dbContext);
 
     }
 
@@ -31,7 +34,10 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<Product> ProductRepository { get; }
     public IGenericRepository<Account> AccountRepository { get; }
     public IGenericRepository<Card> CardRepository { get; }
-    public IGenericRepository<OrderProduct> OrderProductRepository { get; }
+    public IGenericRepository<Basket> BasketRepository { get; }
+    public IGenericRepository<BasketItem> BasketItemRepository { get; }
+
+    // public IGenericRepository<OrderProduct> OrderProductRepository { get; }
 
 
 }

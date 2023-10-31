@@ -17,8 +17,10 @@ public class Customer : BaseModel
     public string Password { get; set; }
     public float  Profit { get; set; }
     
-    public virtual ICollection<Order> Orders { get; set; } 
-    public virtual ICollection<Account> Accounts { get; set; }  
+    //public virtual ICollection<Order> Orders { get; set; } 
+    public virtual ICollection<Account> Accounts { get; set; } 
+    public virtual ICollection<Basket> Baskets { get; set; } 
+    
 }
 class CustomerConfigruration : IEntityTypeConfiguration<Customer>
 {
@@ -37,13 +39,19 @@ class CustomerConfigruration : IEntityTypeConfiguration<Customer>
         builder.Property(x => x.Profit).IsRequired().HasDefaultValue(0);
 
         
-        builder.HasMany(c => c.Orders)
+        // builder.HasMany(c => c.Orders)
+        //     .WithOne(a => a.Customer)
+        //     .HasForeignKey(a => a.CustomerNumber)
+        //     .HasPrincipalKey(c => c.CustomerNumber)
+        //     .IsRequired(true);
+        
+        builder.HasMany(c => c.Accounts)
             .WithOne(a => a.Customer)
             .HasForeignKey(a => a.CustomerNumber)
             .HasPrincipalKey(c => c.CustomerNumber)
             .IsRequired(true);
         
-        builder.HasMany(c => c.Accounts)
+        builder.HasMany(c => c.Baskets)
             .WithOne(a => a.Customer)
             .HasForeignKey(a => a.CustomerNumber)
             .HasPrincipalKey(c => c.CustomerNumber)
