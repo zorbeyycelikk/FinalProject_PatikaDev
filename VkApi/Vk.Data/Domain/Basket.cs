@@ -10,12 +10,12 @@ public class Basket : BaseModel
 {
     public string BasketNumber { get; set; }
     
-    public virtual Order Order { get; set; }
-    
     public string CustomerNumber { get; set; }
     public virtual Customer Customer { get; set; }
     
     public virtual ICollection<BasketItem> BasketItems { get; set; }
+    public virtual ICollection<Order> Orders { get; set; }
+
     
 }
 class BasketConfigruration : IEntityTypeConfiguration<Basket>
@@ -29,6 +29,12 @@ class BasketConfigruration : IEntityTypeConfiguration<Basket>
         builder.Property(x => x.CustomerNumber).IsRequired();
         
         builder.HasMany(c => c.BasketItems)
+            .WithOne(a => a.Basket)
+            .HasForeignKey(a => a.BasketNumber)
+            .HasPrincipalKey(c => c.BasketNumber)
+            .IsRequired(true);
+        
+        builder.HasMany(c => c.Orders)
             .WithOne(a => a.Basket)
             .HasForeignKey(a => a.BasketNumber)
             .HasPrincipalKey(c => c.BasketNumber)

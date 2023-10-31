@@ -16,11 +16,6 @@ public class Order : BaseModel
     
     public string BasketNumber { get; set; }
     public virtual Basket Basket { get; set; }
-    
-    // public string   CustomerNumber   { get; set; }
-    // public Customer Customer         { get; set; }
-    // public virtual ICollection<OrderProduct> OrderProducts { get; set; }
-
 }
 
 class OrderConfigruration : IEntityTypeConfiguration<Order>
@@ -35,17 +30,5 @@ class OrderConfigruration : IEntityTypeConfiguration<Order>
         builder.Property(x => x.Description).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Address).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Address).IsRequired().HasMaxLength(50);
-        // builder.Property(x => x.CustomerNumber).IsRequired(true);
-
-        builder.HasOne(x => x.Basket)
-            .WithOne(x => x.Order)
-            .HasForeignKey<Basket>()
-            .HasPrincipalKey<Order>(x => x.OrderNumber);
-        //   
-        // builder.HasMany(o => o.OrderProducts)
-        //     .WithOne(op => op.Order)
-        //     .HasForeignKey(op => op.OrderNumber )
-        //     .HasPrincipalKey(o => o.OrderNumber)
-        //     .IsRequired(true);
     }
 }

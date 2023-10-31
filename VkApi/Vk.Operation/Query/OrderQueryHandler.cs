@@ -24,14 +24,14 @@ public class OrderQueryHandler :
     
     public async Task<ApiResponse<List<OrderResponse>>> Handle(GetAllOrderQuery request, CancellationToken cancellationToken)
     {
-        List<Order> x =  await unitOfWork.OrderRepository.GetAll(cancellationToken, "Customer");
+        List<Order> x =  await unitOfWork.OrderRepository.GetAll(cancellationToken, "Basket");
         List<OrderResponse> response = mapper.Map<List<OrderResponse>>(x);
         return new ApiResponse<List<OrderResponse>>(response);
     }
 
     public async Task<ApiResponse<OrderResponse>> Handle(GetOrderById request, CancellationToken cancellationToken)
     {
-        Order x = await unitOfWork.OrderRepository.GetById(request.Id, cancellationToken , "Customer");
+        Order x = await unitOfWork.OrderRepository.GetById(request.Id, cancellationToken , "Basket");
         
         if (x is null)
         {

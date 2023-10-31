@@ -32,12 +32,6 @@ class ProductConfigruration : IEntityTypeConfiguration<Product>
         builder.Property(x => x.Price).IsRequired().HasDefaultValue(0);
         builder.Property(x => x.Category).IsRequired().HasMaxLength(50);
         
-        // builder.HasMany(o => o.OrderProducts)
-        //     .WithOne(op => op.Product)
-        //     .HasForeignKey(op => op.ProductNumber )
-        //     .HasPrincipalKey(o => o.ProductNumber)
-        //     .IsRequired(true);
-        
         builder.HasMany(o => o.BasketItems)
             .WithOne(op => op.Product)
             .HasForeignKey(op => op.ProductNumber )

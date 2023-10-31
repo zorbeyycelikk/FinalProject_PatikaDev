@@ -82,11 +82,11 @@ public class TokenCommandHandler :
         {
             new Claim("Id", customer.Id.ToString()),
             new Claim("CustomerNumber", customer.CustomerNumber),
-            new Claim("Role", customer.Name), // düzeltilecek
+            new Claim("Role", customer.Role),
             new Claim("Email", customer.Email),
             new Claim("Name", customer.Name),
             new Claim("Profit", customer.Profit.ToString()),
-            new Claim(ClaimTypes.Role, customer.Name), // düzeltilecek
+            new Claim(ClaimTypes.Role, customer.Role)
         };
 
         return claims;

@@ -24,14 +24,14 @@ public class BasketQueryHandler :
     
     public async Task<ApiResponse<List<BasketResponse>>> Handle(GetAllBasketQuery request, CancellationToken cancellationToken)
     {
-        List<Basket> x =  await unitOfWork.BasketRepository.GetAll(cancellationToken,"Customer" , "Order" , "BasketItems");
+        List<Basket> x =  await unitOfWork.BasketRepository.GetAll(cancellationToken,"Customer" ,"BasketItems");
         List<BasketResponse> response = mapper.Map<List<BasketResponse>>(x);
         return new ApiResponse<List<BasketResponse>>(response);
     }
 
     public async Task<ApiResponse<BasketResponse>> Handle(GetBasketById request, CancellationToken cancellationToken)
     {
-        Basket x = await unitOfWork.BasketRepository.GetById(request.Id, cancellationToken ,"Customer" , "Order","BasketItems");
+        Basket x = await unitOfWork.BasketRepository.GetById(request.Id, cancellationToken ,"Customer" ,"BasketItems");
         
         if (x is null)
         {

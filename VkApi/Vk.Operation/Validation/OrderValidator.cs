@@ -11,7 +11,6 @@ public class CreateOrderValidator: AbstractValidator<CreateOrderRequest>
         RuleFor(x => x.Description).NotEmpty().MaximumLength(50);
         RuleFor(x => x.Address).NotEmpty().MaximumLength(50);
         RuleFor(x => x.Status).NotEmpty().MaximumLength(50);
-        RuleFor(x => x.CustomerNumber).NotEmpty();
     }
 }
 

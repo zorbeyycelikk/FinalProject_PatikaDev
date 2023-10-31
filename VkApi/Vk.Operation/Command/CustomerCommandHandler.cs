@@ -27,7 +27,7 @@ public class CustomerCommandHandler:
     public async Task<ApiResponse> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
     {
         var entity = await unitOfWork.CustomerRepository.GetAsQueryable()
-           .SingleOrDefaultAsync(x => x.CustomerNumber == request.Model.CustomerNumber ,cancellationToken);
+           .SingleOrDefaultAsync(x => x.CustomerNumber == request.Model.CustomerNumber && x.Email == request.Model.Email ,cancellationToken);
         if (entity is not null)
         {
             return new ApiResponse("Error");
@@ -46,6 +46,7 @@ public class CustomerCommandHandler:
     public async Task<ApiResponse> Handle(UpdateCustomerCommand request, CancellationToken cancellationToken)
     {
         var entity = await unitOfWork.CustomerRepository.GetById(request.Id, cancellationToken);
+        
         if (entity is null)
         {
             return new ApiResponse("Error");

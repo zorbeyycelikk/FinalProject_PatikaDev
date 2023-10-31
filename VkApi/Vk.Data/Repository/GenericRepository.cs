@@ -36,10 +36,10 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         }
         return await query.FirstOrDefaultAsync(x => x.Id == id,cancellationToken);
     }
-
+    
     public IQueryable<TEntity> GetWhere(Expression<Func<TEntity, bool>> method, params string[] includes)
     {
-        var query = dbContext.Set<TEntity>().AsQueryable();
+        var query = Table.AsQueryable();
         query.Where(method);
         if (includes.Any())
         {
