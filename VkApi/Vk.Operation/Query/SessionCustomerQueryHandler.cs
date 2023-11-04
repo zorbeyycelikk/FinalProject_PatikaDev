@@ -32,9 +32,7 @@ public class SessionCustomerQueryHandler :
 
     public async Task<ApiResponse<CustomerResponse>> Handle(GetSessionCustomerInfoByCustomerNumber request, CancellationToken cancellationToken)
     {
-        Customer entity = await unitOfWork.CustomerRepository.GetAsQueryable()
-            .Where(c => c.CustomerNumber == request.CustomerNumber)
-            .SingleOrDefaultAsync(cancellationToken);
+        Customer entity = await unitOfWork.CustomerRepository.GetById(request.CustomerNumber, cancellationToken);
 
         if (entity is null)
         {
@@ -47,7 +45,7 @@ public class SessionCustomerQueryHandler :
     public async Task<ApiResponse<List<AccountResponse>>> Handle(GetSessionCustomerAllAccountInfoByCustomerNumber request, CancellationToken cancellationToken)
     {
         List<Account> entities = await unitOfWork.AccountRepository.GetAsQueryable()
-            .Where(a => a.CustomerNumber == request.CustomerNumber)
+            .Where(a => a.CustomerId == request.CustomerNumber)
             .ToListAsync(cancellationToken);
         
         if (entities == null || !entities.Any())
@@ -62,7 +60,7 @@ public class SessionCustomerQueryHandler :
     public async Task<ApiResponse<List<CardResponse>>> Handle(GetSessionCustomerAllCardInfoByCustomerNumber request, CancellationToken cancellationToken)
     {
         List<Card> entities = await unitOfWork.CardRepository.GetAsQueryable()
-            .Where(a => a.Account.CustomerNumber == request.CustomerNumber)
+            .Where(a => a.Account.CustomerId == request.CustomerNumber)
             .ToListAsync(cancellationToken);
         
         if (entities == null || !entities.Any())
@@ -77,7 +75,7 @@ public class SessionCustomerQueryHandler :
     public async Task<ApiResponse<List<BasketResponse>>> Handle(GetSessionCustomerAllBasketInfoByCustomerNumber request, CancellationToken cancellationToken)
     {
         List<Basket> entities = await unitOfWork.BasketRepository.GetAsQueryable("BasketItems")
-            .Where(a => a.CustomerNumber == request.CustomerNumber)
+            .Where(a => a.CustomerId == request.CustomerNumber)
             .ToListAsync(cancellationToken);
         
         if (entities == null || !entities.Any())
@@ -92,7 +90,7 @@ public class SessionCustomerQueryHandler :
     public async Task<ApiResponse<List<BasketItemResponse>>> Handle(GetSessionCustomerAllBasketItemInfoByCustomerNumber request, CancellationToken cancellationToken)
     {
         List<BasketItem> entities = await unitOfWork.BasketItemRepository.GetAsQueryable("Basket" , "Product")
-            .Where(a => a.Basket.CustomerNumber == request.CustomerNumber)
+            .Where(a => a.Basket.CustomerId == request.CustomerNumber)
             .ToListAsync(cancellationToken);
         
         if (entities == null || !entities.Any())
@@ -107,7 +105,7 @@ public class SessionCustomerQueryHandler :
     public async Task<ApiResponse<List<OrderResponse>>> Handle(GetSessionCustomerAllOrderInfoByCustomerNumber request, CancellationToken cancellationToken)
     {
         List<Order> entities = await unitOfWork.OrderRepository.GetAsQueryable("Basket")
-            .Where(a => a.Basket.CustomerNumber == request.CustomerNumber)
+            .Where(a => a.Basket.CustomerId == request.CustomerNumber)
             .ToListAsync(cancellationToken);
         
         if (entities == null || !entities.Any())
@@ -122,9 +120,7 @@ public class SessionCustomerQueryHandler :
     public async Task<ApiResponse<List<ProductResponse>>> Handle(GetSessionCustomerProductListInfoByCustomerNumber request, CancellationToken cancellationToken)
     {
         List<Product> entities = await unitOfWork.ProductRepository.GetAll(cancellationToken);
-        Customer entity = await unitOfWork.CustomerRepository.GetAsQueryable()
-            .Where(c => c.CustomerNumber == request.CustomerNumber)
-            .SingleOrDefaultAsync(cancellationToken);
+        Customer entity = await unitOfWork.CustomerRepository.GetById(request.CustomerNumber,cancellationToken);
         
         if (entities == null || !entities.Any())
         {

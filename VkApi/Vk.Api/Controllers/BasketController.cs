@@ -25,7 +25,7 @@ public class BasketController : ControllerBase
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> Get(string id)
     {
         var operation = new GetBasketById(id);
         var result = await mediator.Send(operation);
@@ -41,7 +41,7 @@ public class BasketController : ControllerBase
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteById(int id)
+    public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteBasketCommand(id);
         var result = await mediator.Send(operation);

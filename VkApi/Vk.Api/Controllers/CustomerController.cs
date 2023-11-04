@@ -18,7 +18,7 @@ public class CustomerController : ControllerBase
     }
     
     [HttpGet]
-    // [Authorize(Roles = "admin")]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Get()
     {
         var operation = new GetAllCustomerQuery();
@@ -27,7 +27,7 @@ public class CustomerController : ControllerBase
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> Get(string id)
     {
         var operation = new GetCustomerById(id);
         var result = await mediator.Send(operation);
@@ -43,7 +43,7 @@ public class CustomerController : ControllerBase
     }
     
     [HttpPut("{id}")]
-    public async  Task<IActionResult> Put(int id, [FromBody] UpdateCustomerRequest request)
+    public async  Task<IActionResult> Put(string id, [FromBody] UpdateCustomerRequest request)
     {
         var operation = new UpdateCustomerCommand(request,id);
         var result = await mediator.Send(operation);
@@ -51,7 +51,7 @@ public class CustomerController : ControllerBase
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteById(int id)
+    public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteCustomerCommand(id);
         var result = await mediator.Send(operation);

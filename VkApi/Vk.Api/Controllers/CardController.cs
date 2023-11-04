@@ -25,7 +25,7 @@ public class CardController : ControllerBase
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> Get(string id)
     {
         var operation = new GetCardById(id);
         var result = await mediator.Send(operation);
@@ -41,7 +41,7 @@ public class CardController : ControllerBase
     }
     
     [HttpPut("{id}")]
-    public async  Task<IActionResult> Put(int id, [FromBody] UpdateCardRequest request)
+    public async  Task<IActionResult> Put(string id, [FromBody] UpdateCardRequest request)
     {
         var operation = new UpdateCardCommand(request,id);
         var result = await mediator.Send(operation);
@@ -49,7 +49,7 @@ public class CardController : ControllerBase
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteById(int id)
+    public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteCardCommand(id);
         var result = await mediator.Send(operation);

@@ -31,7 +31,8 @@ public class OrderCommandHandler:
             return new ApiResponse("Error");
         }
         Order mapped = mapper.Map<Order>(request.Model);
-        
+        mapped.Id = mapped.MakeId(mapped.Id);
+
         unitOfWork.OrderRepository.AddAsync(mapped,cancellationToken);
         unitOfWork.Save();
         

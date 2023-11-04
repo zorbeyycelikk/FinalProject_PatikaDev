@@ -8,13 +8,12 @@ namespace Vk.Data.Domain;
 [Table("Product", Schema = "dbo")]
 public class Product : BaseModel
 {
-    public string ProductNumber  { get; set; }
     public string Name           { get; set; }
     public string Category       { get; set; }
     public int    Stock          { get; set; }
     public float  Price          { get; set; }
+    public string imgUrl         { get; set; }
     
-    // public virtual ICollection<OrderProduct> OrderProducts { get; set; }
     public virtual ICollection<BasketItem> BasketItems { get; set; }
     
 }
@@ -34,8 +33,8 @@ class ProductConfigruration : IEntityTypeConfiguration<Product>
         
         builder.HasMany(o => o.BasketItems)
             .WithOne(op => op.Product)
-            .HasForeignKey(op => op.ProductNumber )
-            .HasPrincipalKey(o => o.ProductNumber)
+            .HasForeignKey(op => op.ProductId )
+            .HasPrincipalKey(o => o.Id)
             .IsRequired(true);
     }
 }

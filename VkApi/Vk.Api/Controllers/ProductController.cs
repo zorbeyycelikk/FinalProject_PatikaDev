@@ -24,8 +24,16 @@ public class ProductController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
+    [HttpGet("GetAllUniqueProductCategoryNamesQuery")]    
+    public async Task<IActionResult> GetCategories()
+    {
+        var operation = new GetAllUniqueProductCategoryNamesQuery();
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> Get(string id)
     {
         var operation = new GetProductById(id);
         var result = await mediator.Send(operation);
@@ -41,7 +49,7 @@ public class ProductController : ControllerBase
     }
     
     [HttpPut("{id}")]
-    public async  Task<IActionResult> Put(int id, [FromBody] UpdateProductRequest request)
+    public async  Task<IActionResult> Put(string id, [FromBody] UpdateProductRequest request)
     {
         var operation = new UpdateProductCommand(request,id);
         var result = await mediator.Send(operation);
@@ -49,7 +57,7 @@ public class ProductController : ControllerBase
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteById(int id)
+    public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteProductCommand(id);
         var result = await mediator.Send(operation);

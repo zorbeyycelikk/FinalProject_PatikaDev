@@ -31,8 +31,10 @@ public class CardCommandHandler:
         {
             return new ApiResponse("Error");
         }
-        Card mapped = mapper.Map<Card>(request.Model);
         
+        Card mapped = mapper.Map<Card>(request.Model);
+        mapped.Id = mapped.MakeId(mapped.Id);
+
         unitOfWork.CardRepository.AddAsync(mapped,cancellationToken);
         unitOfWork.Save();
         

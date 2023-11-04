@@ -6,7 +6,7 @@ public class CreateOrderRequest
     public string   Description      { get; set; }
     public string   Address          { get; set; }
     public string   Status           { get; set; }
-    public string   BasketNumber     { get; set; }
+    public string   BasketId     { get; set; }
 }
 
 public class UpdateOrderRequest
@@ -22,8 +22,8 @@ public class OrderResponse
     public string   Description      { get; set; }
     public string   Address          { get; set; }
     public string   Status           { get; set; }
-    public string   BasketNumber     { get; set; }
-    public string   CustomerNumber   { get; set; } // MAPTEN GELECEK
+    public string   BasketId         { get; set; }
+    public string   CustomerId       { get; set; } // MAPTEN GELECEK
 
     public List<BasketItemResponse>   BasketItems     { get; set; }
 }

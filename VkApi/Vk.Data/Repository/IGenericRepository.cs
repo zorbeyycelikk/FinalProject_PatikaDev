@@ -9,7 +9,7 @@ public interface IGenericRepository<TEntity> where TEntity : BaseModel
     Task<List<TEntity>> GetAll(CancellationToken cancellationToken ,params string[] includes);
     
     // Get By Id
-    Task<TEntity> GetById(int id,CancellationToken cancellationToken,params string[] includes);
+    Task<TEntity> GetById(string id,CancellationToken cancellationToken,params string[] includes);
     
     IQueryable<TEntity> GetWhere(Expression<Func<TEntity, bool>> method,params string[] includes);
     
@@ -23,7 +23,7 @@ public interface IGenericRepository<TEntity> where TEntity : BaseModel
     
     void Remove(TEntity entity);
     
-    void Remove(int id);
+    void Remove(string id);
     
     void Update(TEntity entity);
     

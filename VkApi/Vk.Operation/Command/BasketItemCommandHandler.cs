@@ -24,14 +24,23 @@ public class BasketItemCommandHandler:
     public async Task<ApiResponse> Handle(CreateBasketItemCommand request, CancellationToken cancellationToken)
     {
         BasketItem mapped = mapper.Map<BasketItem>(request.Model);
+        mapped.Id = mapped.MakeId(mapped.Id);
+        var x = await unitOfWork.BasketItemRepository.GetAsQueryable()
+            .Where(x => x.ProductId == request.Model.ProductId)
+            .SingleOrDefaultAsync(cancellationToken);
+        if (x is null)
+        {
+            unitOfWork.BasketItemRepository.AddAsync(mapped,cancellationToken);
+        }
+        else
+        {
+            x.Quantity = x.Quantity + request.Model.Quantity;
+        }
         
-        unitOfWork.BasketItemRepository.AddAsync(mapped,cancellationToken);
         unitOfWork.Save();
-        
         return new ApiResponse();
     }
-
-
+    
     public async Task<ApiResponse> Handle(DeleteBasketItemCommand request, CancellationToken cancellationToken)
     {
         var entity = await unitOfWork.BasketItemRepository.GetById(request.Id, cancellationToken);

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Vk.Base.Response;
 using Vk.Data.Domain;
 using Vk.Data.Uow;
@@ -11,7 +12,9 @@ using MediatR;
 
 public class ProductQueryHandler :
     IRequestHandler<GetAllProductQuery, ApiResponse<List<ProductResponse>>>,
-    IRequestHandler<GetProductById, ApiResponse<ProductResponse>>
+    IRequestHandler<GetProductById, ApiResponse<ProductResponse>>,
+    IRequestHandler<GetAllUniqueProductCategoryNamesQuery, ApiResponse<List<string>>>
+
 {
     private readonly IMapper mapper;
     private readonly IUnitOfWork unitOfWork;
@@ -40,5 +43,13 @@ public class ProductQueryHandler :
         
         ProductResponse response = mapper.Map<ProductResponse>(x);
         return new ApiResponse<ProductResponse>(response);
+    }
+
+    public async Task<ApiResponse<List<string>>> Handle(GetAllUniqueProductCategoryNamesQuery request, CancellationToken cancellationToken)
+    {
+        var uniqueCategoryNames = await unitOfWork.ProductRepository.GetAsQueryable()
+            .Select(p => p.Category).Distinct().ToListAsync(cancellationToken);
+
+        return new ApiResponse<List<string>>(uniqueCategoryNames);
     }
 }

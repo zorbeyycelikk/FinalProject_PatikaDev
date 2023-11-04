@@ -26,13 +26,16 @@ public class AccountCommandHandler:
     public async Task<ApiResponse> Handle(CreateAccountCommand request, CancellationToken cancellationToken)
     {
         var entity = await unitOfWork.AccountRepository.GetAsQueryable()
-           .SingleOrDefaultAsync(x => x.AccountNumber == request.Model.AccountNumber ,cancellationToken);
+            .Where(x => x.AccountNumber == request.Model.AccountNumber)
+            .SingleOrDefaultAsync(cancellationToken);
         
         if (entity is not null)
         {
             return new ApiResponse("Error");
         }
+        
         Account mapped = mapper.Map<Account>(request.Model);
+        mapped.Id = mapped.MakeId(mapped.Id);
         
         unitOfWork.AccountRepository.AddAsync(mapped,cancellationToken);
         unitOfWork.Save();
@@ -43,6 +46,7 @@ public class AccountCommandHandler:
     public async Task<ApiResponse> Handle(UpdateAccountCommand request, CancellationToken cancellationToken)
     {
         var entity = await unitOfWork.AccountRepository.GetById(request.Id, cancellationToken);
+        
         if (entity is null)
         {
             return new ApiResponse("Error");

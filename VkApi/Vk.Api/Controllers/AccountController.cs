@@ -25,7 +25,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> Get(string id)
     {
         var operation = new GetAccountById(id);
         var result = await mediator.Send(operation);
@@ -41,7 +41,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpPut("{id}")]
-    public async  Task<IActionResult> Put(int id, [FromBody] UpdateAccountRequest request)
+    public async  Task<IActionResult> Put(string id, [FromBody] UpdateAccountRequest request)
     {
         var operation = new UpdateAccountCommand(request,id);
         var result = await mediator.Send(operation);
@@ -49,7 +49,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteById(int id)
+    public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteAccountCommand(id);
         var result = await mediator.Send(operation);

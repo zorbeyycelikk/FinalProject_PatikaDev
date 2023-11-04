@@ -8,9 +8,9 @@ namespace Vk.Data.Domain;
 [Table("Account", Schema = "dbo")]
 public class Account : BaseModel
 {
-    public string CustomerNumber { get; set; }
+    public string CustomerId { get; set; }
     public virtual Customer Customer { get; set; }
-
+    
     public string AccountNumber { get; set; }
     public string Name { get; set; }
     public string IBAN { get; set; }
@@ -40,8 +40,8 @@ public class AccountConfigruration : IEntityTypeConfiguration<Account>
         
         builder.HasMany(a => a.Cards)
             .WithOne(c => c.Account)
-            .HasForeignKey(c=> c.AccountNumber)
-            .HasPrincipalKey(a => a.AccountNumber)
+            .HasForeignKey(c=> c.AccountId)
+            .HasPrincipalKey(a => a.Id)
             .IsRequired(true);
     }
 }

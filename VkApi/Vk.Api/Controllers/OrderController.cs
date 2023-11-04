@@ -25,7 +25,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> Get(int id)
+    public async Task<IActionResult> Get(string id)
     {
         var operation = new GetOrderById(id);
         var result = await mediator.Send(operation);
@@ -41,7 +41,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpPut("{id}")]
-    public async  Task<IActionResult> Put(int id, [FromBody] UpdateOrderRequest request)
+    public async  Task<IActionResult> Put(string id, [FromBody] UpdateOrderRequest request)
     {
         var operation = new UpdateOrderCommand(request,id);
         var result = await mediator.Send(operation);
@@ -49,7 +49,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteById(int id)
+    public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteOrderCommand(id);
         var result = await mediator.Send(operation);

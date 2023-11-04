@@ -14,7 +14,7 @@ public class Order : BaseModel
     public string   Address          { get; set; }
     public string   Status           { get; set; }
     
-    public string BasketNumber { get; set; }
+    public string BasketId { get; set; }
     public virtual Basket Basket { get; set; }
 }
 

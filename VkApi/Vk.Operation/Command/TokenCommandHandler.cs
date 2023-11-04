@@ -52,7 +52,8 @@ public class TokenCommandHandler :
         {
             Token = token,
             ExpireDate = DateTime.Now.AddMinutes(jwtConfig.AccessTokenExpiration),
-            CustomerNumber = entity.CustomerNumber,
+            CustomerId= entity.Id,
+            Role = entity.Role,
             Email = entity.Email
         };
         
@@ -80,15 +81,13 @@ public class TokenCommandHandler :
     {
         var claims = new[]
         {
-            new Claim("Id", customer.Id.ToString()),
-            new Claim("CustomerNumber", customer.CustomerNumber),
+            new Claim("Id", customer.Id),
             new Claim("Role", customer.Role),
             new Claim("Email", customer.Email),
             new Claim("Name", customer.Name),
             new Claim("Profit", customer.Profit.ToString()),
             new Claim(ClaimTypes.Role, customer.Role)
         };
-
         return claims;
     }
 }

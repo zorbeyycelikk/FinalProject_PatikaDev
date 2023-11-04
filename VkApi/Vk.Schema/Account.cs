@@ -2,7 +2,7 @@ namespace Vk.Schema;
 
 public class CreateAccountRequest
 { 
-    public string CustomerNumber { get; set; }
+    public string CustomerId { get; set; }
     public string AccountNumber { get; set; }
     public string Name { get; set; }
     public string IBAN { get; set; }
@@ -18,7 +18,8 @@ public class UpdateAccountRequest
 
 public class AccountResponse
 {
-    public string CustomerNumber { get; set; }
+    public string CustomerId { get; set; }
+    public string Id { get; set; }
     public string AccountNumber { get; set; }
     public string Name { get; set; }
     public string IBAN { get; set; }

@@ -9,10 +9,11 @@ namespace Vk.Data.Domain;
 [Table("BasketItem", Schema = "dbo")]
 public class BasketItem : BaseModel
 {
-    public string BasketNumber { get; set; }
+    public int Quantity { get; set; }
+    public string BasketId { get; set; }
     public virtual Basket Basket { get; set; }
     
-    public string ProductNumber { get; set; }
+    public string ProductId { get; set; }
     public virtual Product Product { get; set; }
 }
 
@@ -24,7 +25,8 @@ class BasketItemConfigruration : IEntityTypeConfiguration<BasketItem>
         builder.Property(x => x.UpdateDate).IsRequired(false);
         builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
 
-        builder.Property(x => x.BasketNumber).IsRequired();
-        builder.Property(x => x.ProductNumber).IsRequired();
+        builder.Property(x => x.Quantity).IsRequired();
+        builder.Property(x => x.BasketId).IsRequired();
+        builder.Property(x => x.ProductId).IsRequired();
     }
 }

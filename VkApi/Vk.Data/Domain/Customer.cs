@@ -9,7 +9,6 @@ namespace Vk.Data.Domain;
 [Table("Customer", Schema = "dbo")]
 public class Customer : BaseModel
 {
-    public string CustomerNumber { get; set; }
     public string Name  { get; set; }
     public string Email { get; set; }
     public string Phone { get; set; }
@@ -30,31 +29,24 @@ class CustomerConfigruration : IEntityTypeConfiguration<Customer>
         builder.Property(x => x.UpdateDate).IsRequired(false);
         builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
         
-        builder.Property(x => x.CustomerNumber).IsRequired().HasMaxLength(50);
+        builder.Property(x => x.Id).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Name).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Email).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Phone).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Role).IsRequired().HasMaxLength(5).HasDefaultValue("bayi");
         builder.Property(x => x.Password).IsRequired();
         builder.Property(x => x.Profit).IsRequired().HasDefaultValue(0);
-
-        
-        // builder.HasMany(c => c.Orders)
-        //     .WithOne(a => a.Customer)
-        //     .HasForeignKey(a => a.CustomerNumber)
-        //     .HasPrincipalKey(c => c.CustomerNumber)
-        //     .IsRequired(true);
         
         builder.HasMany(c => c.Accounts)
             .WithOne(a => a.Customer)
-            .HasForeignKey(a => a.CustomerNumber)
-            .HasPrincipalKey(c => c.CustomerNumber)
+            .HasForeignKey(a => a.CustomerId)
+            .HasPrincipalKey(c => c.Id)
             .IsRequired(true);
         
         builder.HasMany(c => c.Baskets)
             .WithOne(a => a.Customer)
-            .HasForeignKey(a => a.CustomerNumber)
-            .HasPrincipalKey(c => c.CustomerNumber)
+            .HasForeignKey(a => a.CustomerId)
+            .HasPrincipalKey(c => c.Id)
             .IsRequired(true);
     }
 }

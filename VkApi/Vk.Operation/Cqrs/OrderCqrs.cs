@@ -5,8 +5,8 @@ using Vk.Schema;
 namespace Vk.Operation.Cqrs;
 
 public record CreateOrderCommand(CreateOrderRequest Model) : IRequest<ApiResponse>;
-public record UpdateOrderCommand(UpdateOrderRequest Model,int Id) : IRequest<ApiResponse>;
-public record DeleteOrderCommand(int Id) : IRequest<ApiResponse>;
+public record UpdateOrderCommand(UpdateOrderRequest Model,string Id) : IRequest<ApiResponse>;
+public record DeleteOrderCommand(string Id) : IRequest<ApiResponse>;
 
 public record GetAllOrderQuery() : IRequest<ApiResponse<List<OrderResponse>>>;
-public record GetOrderById(int Id) : IRequest<ApiResponse<OrderResponse>>;
+public record GetOrderById(string Id) : IRequest<ApiResponse<OrderResponse>>;

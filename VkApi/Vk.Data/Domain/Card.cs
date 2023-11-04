@@ -8,7 +8,7 @@ namespace Vk.Data.Domain;
 [Table("Card", Schema = "dbo")]
 public class Card : BaseModel
 {
-    public string AccountNumber { get; set; }
+    public string AccountId { get; set; }
     public virtual Account Account { get; set; }
 
     public string CardNumber { get; set; }
@@ -24,11 +24,11 @@ public class CardConfigruration : IEntityTypeConfiguration<Card>
         builder.Property(x => x.UpdateDate).IsRequired(false);
         builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
 
-        builder.Property(x => x.AccountNumber).IsRequired(true);
+        builder.Property(x => x.AccountId).IsRequired(true);
         builder.Property(x => x.CardNumber).IsRequired();
         builder.Property(x => x.Cvv).IsRequired().HasMaxLength(3);
         builder.Property(x => x.ExpiryDate).IsRequired();
 
-        builder.HasIndex(x => x.AccountNumber);
+        builder.HasIndex(x => x.AccountId);
     }
 }

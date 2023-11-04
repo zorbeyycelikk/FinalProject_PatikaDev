@@ -24,14 +24,9 @@ public class ProductCommandHandler:
 
     public async Task<ApiResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var entity = await unitOfWork.ProductRepository.GetAsQueryable()
-           .SingleOrDefaultAsync(x => x.ProductNumber == request.Model.ProductNumber ,cancellationToken);
-        if (entity is not null)
-        {
-            return new ApiResponse("Error");
-        }
         Product mapped = mapper.Map<Product>(request.Model);
-        
+        mapped.Id = mapped.MakeId(mapped.Id);
+
         unitOfWork.ProductRepository.AddAsync(mapped,cancellationToken);
         unitOfWork.Save();
         

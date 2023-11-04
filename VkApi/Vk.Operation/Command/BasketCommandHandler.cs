@@ -23,14 +23,16 @@ public class BasketCommandHandler:
 
     public async Task<ApiResponse> Handle(CreateBasketCommand request, CancellationToken cancellationToken)
     {
-        var entity = await unitOfWork.BasketRepository.GetAsQueryable()
-           .SingleOrDefaultAsync(x => x.BasketNumber == request.Model.BasketNumber ,cancellationToken);
-        if (entity is not null)
+        var x = await unitOfWork.BasketRepository.GetAsQueryable()
+            .Where(x => x.CustomerId == request.Model.CustomerId).SingleOrDefaultAsync(cancellationToken);
+        //Eğer aktif bir hesabı var ise yeni hesap yaratmaz
+        if (x is not null)
         {
             return new ApiResponse("Error");
         }
         Basket mapped = mapper.Map<Basket>(request.Model);
-        
+        mapped.Id = mapped.MakeId(mapped.Id);
+
         unitOfWork.BasketRepository.AddAsync(mapped,cancellationToken);
         unitOfWork.Save();
         

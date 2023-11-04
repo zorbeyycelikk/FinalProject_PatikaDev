@@ -27,7 +27,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return await query.ToListAsync(cancellationToken);
     }
 
-    public async Task<TEntity> GetById(int id, CancellationToken cancellationToken, params string[] includes)
+    public async Task<TEntity> GetById(string id, CancellationToken cancellationToken, params string[] includes)
     {
         var query = Table.AsQueryable();
         if (includes.Any())
@@ -84,7 +84,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         Table.Update(entity);
     }
 
-    public void Remove(int id)
+    public void Remove(string id)
     {
         var entity = Table.Find(id);
         entity.IsActive = false;

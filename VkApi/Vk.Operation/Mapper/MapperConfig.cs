@@ -18,8 +18,8 @@ public class MapperConfig : Profile
         CreateMap<Order, OrderResponse>()
             .ForMember(x => x.BasketItems, opt => opt
                 .MapFrom(src => src.Basket.BasketItems))
-            .ForMember(x => x.CustomerNumber, opt => opt
-                .MapFrom(src => src.Basket.CustomerNumber));
+            .ForMember(x => x.CustomerId, opt => opt
+                .MapFrom(src => src.Basket.CustomerId));
         
         CreateMap<CreateProductRequest, Product>();
         CreateMap<UpdateProductRequest, Product>();
@@ -28,8 +28,8 @@ public class MapperConfig : Profile
         CreateMap<CreateCardRequest, Card>();
         CreateMap<UpdateCardRequest, Card>();
         CreateMap<Card, CardResponse>()
-            .ForMember(x => x.CardHolderNumber, opt => opt
-                .MapFrom(src => src.Account.CustomerNumber));
+            .ForMember(x => x.CardHolderId, opt => opt
+                .MapFrom(src => src.Account.CustomerId));
         
         CreateMap<CreateAccountRequest, Account>();
         CreateMap<UpdateAccountRequest, Account>();
@@ -42,16 +42,7 @@ public class MapperConfig : Profile
         
         CreateMap<CreateBasketItemRequest, BasketItem>();
         CreateMap<BasketItem, BasketItemResponse>()
-            .ForMember(x => x.CustomerNumber, opt => opt
-                .MapFrom(src => src.Basket.CustomerNumber))
             .ForMember(x => x.ProductName, opt => opt
                 .MapFrom(src => src.Product.Name));
-
-        // CreateMap<CreateOrderProductRequest, OrderProduct>();
-        // CreateMap<OrderProduct, OrderProductResponse>()
-        //     .ForMember(x => x.CustomerNumberWhoCreateOrder, opt => opt
-        //         .MapFrom(src => src.Order.CustomerNumber))
-        //     .ForMember(x => x.ProductNameWhichCreatedInOrder, opt => opt
-        //         .MapFrom(src => src.Product.Name));
     }
 }

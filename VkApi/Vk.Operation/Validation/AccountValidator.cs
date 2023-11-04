@@ -8,7 +8,6 @@ public class CreateAccountValidator: AbstractValidator<CreateAccountRequest>
     public CreateAccountValidator()
     {
         
-        RuleFor(x => x.AccountNumber).NotEmpty().WithMessage(" 'Customer Number' degeri bos birakilamaz.");
         RuleFor(x => x.Name).NotEmpty().MaximumLength(50);
         RuleFor(x => x.IBAN).NotEmpty().MaximumLength(34);
         RuleFor(x => x.Balance).NotEmpty();

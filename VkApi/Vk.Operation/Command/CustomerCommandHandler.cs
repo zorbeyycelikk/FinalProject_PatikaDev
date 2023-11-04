@@ -27,15 +27,17 @@ public class CustomerCommandHandler:
     public async Task<ApiResponse> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
     {
         var entity = await unitOfWork.CustomerRepository.GetAsQueryable()
-           .SingleOrDefaultAsync(x => x.CustomerNumber == request.Model.CustomerNumber && x.Email == request.Model.Email ,cancellationToken);
+            .Where(x => x.Email == request.Model.Email || x.Phone == request.Model.Phone)
+            .SingleOrDefaultAsync(cancellationToken);
         if (entity is not null)
         {
             return new ApiResponse("Error");
         }
-
-        request.Model.Password = Md5.Create(request.Model.Password.ToUpper());
         
         Customer mapped = mapper.Map<Customer>(request.Model);
+        
+        mapped.Id = mapped.MakeId(mapped.Id);
+        mapped.Password = Md5.Create(mapped.Password.ToUpper());
         
         unitOfWork.CustomerRepository.AddAsync(mapped,cancellationToken);
         unitOfWork.Save();
@@ -67,6 +69,7 @@ public class CustomerCommandHandler:
     public async Task<ApiResponse> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
     {
         var entity = await unitOfWork.CustomerRepository.GetById(request.Id, cancellationToken);
+        
         if (entity is null)
         {
             return new ApiResponse("Error");
