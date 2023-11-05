@@ -21,10 +21,11 @@ public class UpdateProductRequest
 
 public class ProductResponse
 {
+    public string Id             { get; set; }
     public string Name           { get; set; }
     public string Category       { get; set; }
     public int    Stock          { get; set; }
     public float  Price          { get; set; }
-    public string imgUrl       { get; set; }
+    public string imgUrl         { get; set; }
     public bool IsActive         { get; set; }
 }
