@@ -24,7 +24,7 @@ public class BasketCommandHandler:
     public async Task<ApiResponse> Handle(CreateBasketCommand request, CancellationToken cancellationToken)
     {
         var x = await unitOfWork.BasketRepository.GetAsQueryable()
-            .Where(x => x.CustomerId == request.Model.CustomerId).SingleOrDefaultAsync(cancellationToken);
+            .Where(x => x.CustomerId == request.Model.CustomerId && x.IsActive == true).SingleOrDefaultAsync(cancellationToken);
         //Eğer aktif bir hesabı var ise yeni hesap yaratmaz
         if (x is not null)
         {
