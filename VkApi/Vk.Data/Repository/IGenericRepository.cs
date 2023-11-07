@@ -24,6 +24,8 @@ public interface IGenericRepository<TEntity> where TEntity : BaseModel
     void Remove(TEntity entity);
     
     void Remove(string id);
+
+    void HardDelete(string id);
     
     void Update(TEntity entity);
     

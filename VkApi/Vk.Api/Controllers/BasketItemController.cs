@@ -47,4 +47,19 @@ public class BasketItemController : ControllerBase
         var result = await mediator.Send(operation);
         return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
     }
+    [HttpDelete("HardDelete/{id}")]
+    public async Task<IActionResult> HardDeleteById(string id)
+    {
+        var operation = new HardDeleteBasketItemCommand(id);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
+    [HttpDelete("HardDeleteByProductId/{id}")]
+    public async Task<IActionResult> DeleteByProductId(string id)
+    {
+        var operation = new HardDeleteBasketItemByProductNumberCommand(id);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
 }

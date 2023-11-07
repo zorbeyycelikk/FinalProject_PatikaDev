@@ -10,7 +10,10 @@ namespace Vk.Operation.Command;
 
 public class BasketItemCommandHandler:
     IRequestHandler<CreateBasketItemCommand, ApiResponse>,
-    IRequestHandler<DeleteBasketItemCommand, ApiResponse>
+    IRequestHandler<DeleteBasketItemCommand, ApiResponse>,
+    IRequestHandler<HardDeleteBasketItemCommand, ApiResponse>,
+    IRequestHandler<HardDeleteBasketItemByProductNumberCommand, ApiResponse>
+
 {
     private readonly IMapper mapper;
     private readonly IUnitOfWork unitOfWork;
@@ -28,12 +31,6 @@ public class BasketItemCommandHandler:
         var x = await unitOfWork.BasketItemRepository.GetAsQueryable()
             .Where(x => x.ProductId == request.Model.ProductId && x.BasketId == request.Model.BasketId)
             .SingleOrDefaultAsync(cancellationToken);
-        
-        Console.WriteLine("******************************");
-        Console.WriteLine(request.Model.BasketId);
-        Console.WriteLine(request.Model.ProductId);
-        Console.WriteLine(request.Model.Quantity);
-        Console.WriteLine("******************************");
         if (x is null)
         {
             unitOfWork.BasketItemRepository.AddAsync(mapped,cancellationToken);
@@ -42,7 +39,6 @@ public class BasketItemCommandHandler:
         {
             x.Quantity = x.Quantity + request.Model.Quantity;
         }
-        
         unitOfWork.Save();
         return new ApiResponse();
     }
@@ -55,6 +51,32 @@ public class BasketItemCommandHandler:
             return new ApiResponse("Error");
         }
         unitOfWork.BasketItemRepository.Remove(request.Id);
+        unitOfWork.Save();
+        return new ApiResponse();
+    }
+    
+    public async Task<ApiResponse> Handle(HardDeleteBasketItemCommand request, CancellationToken cancellationToken)
+    {
+        var entity = await unitOfWork.BasketItemRepository.GetById(request.Id, cancellationToken);
+        if (entity is null)
+        {
+            return new ApiResponse("Error");
+        }
+        unitOfWork.BasketItemRepository.HardDelete(request.Id);
+        unitOfWork.Save();
+        return new ApiResponse();
+    }
+    
+    public async Task<ApiResponse> Handle(HardDeleteBasketItemByProductNumberCommand request, CancellationToken cancellationToken)
+    {
+        var entity = await unitOfWork.BasketItemRepository.GetAsQueryable()
+            .Where(x => x.Product.Id == request.Id).SingleOrDefaultAsync(cancellationToken);
+        
+        if (entity is null)
+        {
+            return new ApiResponse("Error");
+        }
+        unitOfWork.BasketItemRepository.HardDelete(entity.Id);
         unitOfWork.Save();
         return new ApiResponse();
     }

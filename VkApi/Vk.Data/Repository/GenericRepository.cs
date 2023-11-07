@@ -92,6 +92,12 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         Table.Update(entity);
     }
     
+    public void HardDelete(string id)
+    {
+        var entity = Table.Find(id);
+        Table.Remove(entity);
+    }
+    
     public void Update(TEntity entity)
     {
         entity.UpdateDate = DateTime.UtcNow;
