@@ -33,6 +33,10 @@ public class MapperConfig : Profile
             .ForMember(x => x.AccountNumber, opt => opt
                 .MapFrom(src => src.Account.AccountNumber));
         
+        CreateMap<CreateCardTransactionRequest, CardTransaction>();
+        CreateMap<UpdateCardTransactionRequest, CardTransaction>();
+        CreateMap<CardTransaction, CardTransactionResponse>();
+        
         CreateMap<CreateAccountRequest, Account>();
         CreateMap<UpdateAccountRequest, Account>();
         CreateMap<Account, AccountResponse>();
@@ -42,10 +46,12 @@ public class MapperConfig : Profile
         
         CreateMap<CreateBasketItemRequest, BasketItem>();
         CreateMap<BasketItem, BasketItemResponse>()
-            // .ForMember(x => x.ProductName, opt => opt
-            //     .MapFrom(src => src.Product.Name))
             .ForMember(x => x.Product, opt => opt
                 .MapFrom(src => src.Product));
+        
+        CreateMap<CreatePaymentByCardRequest, PaymentByCardResponse>();
+        
+        CreateMap<CreatePaymentByEftRequest, PaymentByEftResponse>();
 
     }
 }

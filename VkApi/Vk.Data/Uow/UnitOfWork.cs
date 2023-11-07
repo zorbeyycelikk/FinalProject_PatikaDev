@@ -17,10 +17,12 @@ public class UnitOfWork : IUnitOfWork
         ProductRepository = new GenericRepository<Product>(dbContext);
         AccountRepository = new GenericRepository<Account>(dbContext);
         CardRepository = new GenericRepository<Card>(dbContext);
+        CardTransactionRepository = new GenericRepository<CardTransaction>(dbContext);
         BasketRepository = new GenericRepository<Basket>(dbContext);
         BasketItemRepository = new GenericRepository<BasketItem>(dbContext);
+        AccountTransactionRepository = new GenericRepository<AccountTransaction>(dbContext);
 
-        // OrderProductRepository = new GenericRepository<OrderProduct>(dbContext);
+
 
     }
 
@@ -28,16 +30,15 @@ public class UnitOfWork : IUnitOfWork
     {
         dbContext.SaveChanges();
     }
-
+    
     public IGenericRepository<Customer> CustomerRepository { get; }
     public IGenericRepository<Order> OrderRepository { get; }
     public IGenericRepository<Product> ProductRepository { get; }
     public IGenericRepository<Account> AccountRepository { get; }
     public IGenericRepository<Card> CardRepository { get; }
+    public IGenericRepository<CardTransaction> CardTransactionRepository { get; }
     public IGenericRepository<Basket> BasketRepository { get; }
     public IGenericRepository<BasketItem> BasketItemRepository { get; }
-
-    // public IGenericRepository<OrderProduct> OrderProductRepository { get; }
-
+    public IGenericRepository<AccountTransaction> AccountTransactionRepository { get; }
 
 }

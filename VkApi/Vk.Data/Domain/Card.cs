@@ -14,6 +14,9 @@ public class Card : BaseModel
     public string CardNumber { get; set; }
     public string Cvv { get; set; } // nnn
     public DateTime ExpiryDate { get; set; } // DDyy
+    
+    public virtual ICollection<CardTransaction> CardTransactions { get; set; } 
+
 }
 
 public class CardConfigruration : IEntityTypeConfiguration<Card>
@@ -30,5 +33,11 @@ public class CardConfigruration : IEntityTypeConfiguration<Card>
         builder.Property(x => x.ExpiryDate).IsRequired();
 
         builder.HasIndex(x => x.AccountId);
+        
+        builder.HasMany(c => c.CardTransactions)
+            .WithOne(a => a.Card)
+            .HasForeignKey(a => a.CardId)
+            .HasPrincipalKey(c => c.Id)
+            .IsRequired(true);
     }
 }

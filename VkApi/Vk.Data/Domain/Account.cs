@@ -11,14 +11,17 @@ public class Account : BaseModel
     public string CustomerId { get; set; }
     public virtual Customer Customer { get; set; }
     
-    public string AccountNumber { get; set; }
     public string Name { get; set; }
+    public string AccountNumber { get; set; } 
     public string IBAN { get; set; }
     public decimal Balance { get; set; }
     public DateTime OpenDate { get; set; }
     public DateTime? CloseDate { get; set; }
 
-    public virtual ICollection<Card> Cards { get; set; } 
+    public string? CardId { get; set; }
+    public virtual Card Card { get; set; }
+    public virtual ICollection<AccountTransaction> AccountTransactions { get; set; }
+    
 }
 
 public class AccountConfigruration : IEntityTypeConfiguration<Account>
@@ -38,10 +41,15 @@ public class AccountConfigruration : IEntityTypeConfiguration<Account>
         
         builder.HasIndex(x => x.AccountNumber).IsUnique(true);
         
-        builder.HasMany(a => a.Cards)
-            .WithOne(c => c.Account)
-            .HasForeignKey(c=> c.AccountId)
-            .HasPrincipalKey(a => a.Id)
+        builder.HasOne(x=> x.Card)
+            .WithOne(x=> x.Account)
+            .HasForeignKey<Card>(c => c.AccountId)
+            .HasPrincipalKey<Account>(a => a.Id)
+            .IsRequired(true);  
+        
+        builder.HasMany(c => c.AccountTransactions)
+            .WithOne(a => a.Account)
+            .HasForeignKey(a => a.AccountId)
             .IsRequired(true);
     }
 }
