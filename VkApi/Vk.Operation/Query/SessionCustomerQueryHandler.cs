@@ -15,7 +15,9 @@ public class SessionCustomerQueryHandler :
     IRequestHandler<GetSessionCustomerAllAccountInfoByCustomerNumber, ApiResponse<List<AccountResponse>>>,
     IRequestHandler<GetSessionCustomerAllCardInfoByCustomerNumber, ApiResponse<List<CardResponse>>>,
     IRequestHandler<GetSessionCustomerAllBasketInfoByCustomerNumber, ApiResponse<List<BasketResponse>>>,
+    IRequestHandler<GetSessionCustomerActiveBasketInfoByCustomerNumber, ApiResponse<BasketResponse>>,
     IRequestHandler<GetSessionCustomerAllBasketItemInfoByCustomerNumber, ApiResponse<List<BasketItemResponse>>>,
+    IRequestHandler<GetSessionCustomerBasketItemInfoForActiveBasketByCustomerNumber, ApiResponse<List<BasketItemResponse>>>,
     IRequestHandler<GetSessionCustomerAllOrderInfoByCustomerNumber, ApiResponse<List<OrderResponse>>>,
     IRequestHandler<GetSessionCustomerProductListInfoByCustomerNumber, ApiResponse<List<ProductResponse>>>
 {
@@ -36,7 +38,7 @@ public class SessionCustomerQueryHandler :
 
         if (entity is null)
         {
-            return new ApiResponse<CustomerResponse>("Boyle bir kullanici yok.");
+            return new ApiResponse<CustomerResponse>("Error");
         }
         var mapped = mapper.Map<CustomerResponse>(entity);
         return new ApiResponse<CustomerResponse>(mapped);
@@ -50,7 +52,7 @@ public class SessionCustomerQueryHandler :
         
         if (entities == null || !entities.Any())
         {
-            return new ApiResponse<List<AccountResponse>>("Kullanicinin hesabi yok.");
+            return new ApiResponse<List<AccountResponse>>("Error");
         }
         
         var mapped = mapper.Map<List<AccountResponse>>(entities);
@@ -65,7 +67,7 @@ public class SessionCustomerQueryHandler :
         
         if (entities == null || !entities.Any())
         {
-            return new ApiResponse<List<CardResponse>>("Kullanicinin hesabi yok.");
+            return new ApiResponse<List<CardResponse>>("Error");
         }
         
         var mapped = mapper.Map<List<CardResponse>>(entities);
@@ -80,11 +82,26 @@ public class SessionCustomerQueryHandler :
         
         if (entities == null || !entities.Any())
         {
-            return new ApiResponse<List<BasketResponse>>("Kullanicinin hesabi yok.");
+            return new ApiResponse<List<BasketResponse>>("Error");
         }
         
         var mapped = mapper.Map<List<BasketResponse>>(entities);
         return new ApiResponse<List<BasketResponse>>(mapped);
+    }
+    
+    public async Task<ApiResponse<BasketResponse>> Handle(GetSessionCustomerActiveBasketInfoByCustomerNumber request, CancellationToken cancellationToken)
+    {
+        Basket entity = await unitOfWork.BasketRepository.GetAsQueryable("BasketItems")
+            .Where(a => a.CustomerId == request.CustomerNumber && a.IsActive == true)
+            .SingleOrDefaultAsync(cancellationToken);
+        
+        if (entity is null)
+        {
+            return new ApiResponse<BasketResponse>("Error");
+        }
+        
+        var mapped = mapper.Map<BasketResponse>(entity);
+        return new ApiResponse<BasketResponse>(mapped);
     }
 
     public async Task<ApiResponse<List<BasketItemResponse>>> Handle(GetSessionCustomerAllBasketItemInfoByCustomerNumber request, CancellationToken cancellationToken)
@@ -95,7 +112,22 @@ public class SessionCustomerQueryHandler :
         
         if (entities == null || !entities.Any())
         {
-            return new ApiResponse<List<BasketItemResponse>>("Kullanicinin hesabi yok.");
+            return new ApiResponse<List<BasketItemResponse>>("Error");
+        }
+        
+        var mapped = mapper.Map<List<BasketItemResponse>>(entities);
+        return new ApiResponse<List<BasketItemResponse>>(mapped);
+    }
+    
+    public async Task<ApiResponse<List<BasketItemResponse>>> Handle(GetSessionCustomerBasketItemInfoForActiveBasketByCustomerNumber request, CancellationToken cancellationToken)
+    {
+        List<BasketItem> entities = await unitOfWork.BasketItemRepository.GetAsQueryable("Basket" , "Product")
+            .Where(a => a.Basket.CustomerId == request.CustomerNumber && a.Basket.IsActive == true)
+            .ToListAsync(cancellationToken);
+        
+        if (entities == null || !entities.Any())
+        {
+            return new ApiResponse<List<BasketItemResponse>>("Error");
         }
         
         var mapped = mapper.Map<List<BasketItemResponse>>(entities);
@@ -110,7 +142,7 @@ public class SessionCustomerQueryHandler :
         
         if (entities == null || !entities.Any())
         {
-            return new ApiResponse<List<OrderResponse>>("Kullanicinin hesabi yok.");
+            return new ApiResponse<List<OrderResponse>>("Error");
         }
         
         var mapped = mapper.Map<List<OrderResponse>>(entities);
@@ -124,7 +156,7 @@ public class SessionCustomerQueryHandler :
         
         if (entities == null || !entities.Any())
         {
-            return new ApiResponse<List<ProductResponse>>("Kullanicinin hesabi yok.");
+            return new ApiResponse<List<ProductResponse>>("Error");
         }
 
         foreach (var x in entities)

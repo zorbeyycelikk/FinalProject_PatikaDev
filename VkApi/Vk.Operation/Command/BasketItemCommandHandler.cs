@@ -26,8 +26,14 @@ public class BasketItemCommandHandler:
         BasketItem mapped = mapper.Map<BasketItem>(request.Model);
         mapped.Id = mapped.MakeId(mapped.Id);
         var x = await unitOfWork.BasketItemRepository.GetAsQueryable()
-            .Where(x => x.ProductId == request.Model.ProductId)
+            .Where(x => x.ProductId == request.Model.ProductId && x.BasketId == request.Model.BasketId)
             .SingleOrDefaultAsync(cancellationToken);
+        
+        Console.WriteLine("******************************");
+        Console.WriteLine(request.Model.BasketId);
+        Console.WriteLine(request.Model.ProductId);
+        Console.WriteLine(request.Model.Quantity);
+        Console.WriteLine("******************************");
         if (x is null)
         {
             unitOfWork.BasketItemRepository.AddAsync(mapped,cancellationToken);

@@ -54,6 +54,14 @@ public class SessionCustomerController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
+    [HttpGet("GetCustomerActiveBasketInfo")] 
+    public async Task<IActionResult> ActiveBasketInfo()
+    {
+        var number = (User.Identity as ClaimsIdentity).FindFirst("Id").Value;
+        var operation = new GetSessionCustomerActiveBasketInfoByCustomerNumber(number);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
     [HttpGet("GetCustomerAllBasketItemInfo")] 
     public async Task<IActionResult> BasketItemInfo()
     {
@@ -62,6 +70,16 @@ public class SessionCustomerController : ControllerBase
         var result = await mediator.Send(operation);
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
+    
+    [HttpGet("GetCustomerBasketItemInfoForActiveBasketByCustomerNumber")] 
+    public async Task<IActionResult> BasketItemInfoForActiveBasket()
+    {
+        var number = (User.Identity as ClaimsIdentity).FindFirst("Id").Value;
+        var operation = new     GetSessionCustomerBasketItemInfoForActiveBasketByCustomerNumber(number);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
     [HttpGet("GetCustomerAllOrderInfo")] 
     public async Task<IActionResult> OrderInfo()
     {
@@ -78,4 +96,5 @@ public class SessionCustomerController : ControllerBase
         var result = await mediator.Send(operation);
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
+    
 }

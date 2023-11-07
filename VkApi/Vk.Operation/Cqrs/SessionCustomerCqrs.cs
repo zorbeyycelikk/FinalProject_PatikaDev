@@ -12,7 +12,11 @@ public record GetSessionCustomerAllCardInfoByCustomerNumber(string CustomerNumbe
 
 public record GetSessionCustomerAllBasketInfoByCustomerNumber(string CustomerNumber) : IRequest<ApiResponse<List<BasketResponse>>>;
 
+public record GetSessionCustomerActiveBasketInfoByCustomerNumber(string CustomerNumber) : IRequest<ApiResponse<BasketResponse>>;
+
 public record GetSessionCustomerAllBasketItemInfoByCustomerNumber(string CustomerNumber) : IRequest<ApiResponse<List<BasketItemResponse>>>;
+
+public record GetSessionCustomerBasketItemInfoForActiveBasketByCustomerNumber(string CustomerNumber) : IRequest<ApiResponse<List<BasketItemResponse>>>;
 
 public record GetSessionCustomerAllOrderInfoByCustomerNumber(string CustomerNumber) : IRequest<ApiResponse<List<OrderResponse>>>;
 

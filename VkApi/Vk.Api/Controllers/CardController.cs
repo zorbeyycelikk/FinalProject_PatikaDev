@@ -32,6 +32,14 @@ public class CardController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
+    [HttpGet("ByAccount/{id}")]
+    public async Task<IActionResult> GetByAccount(string id)
+    {
+        var operation = new GetCardByAccountNumber(id);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateCardRequest request)
     {

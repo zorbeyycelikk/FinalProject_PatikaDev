@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Vk.Base.Response;
 using Vk.Data.Domain;
 using Vk.Data.Uow;
@@ -11,7 +12,9 @@ using MediatR;
 
 public class CardQueryHandler :
     IRequestHandler<GetAllCardQuery, ApiResponse<List<CardResponse>>>,
-    IRequestHandler<GetCardById, ApiResponse<CardResponse>>
+    IRequestHandler<GetCardById, ApiResponse<CardResponse>>,
+    IRequestHandler<GetCardByAccountNumber, ApiResponse<List<CardResponse>>>
+
 {
     private readonly IMapper mapper;
     private readonly IUnitOfWork unitOfWork;
@@ -40,5 +43,18 @@ public class CardQueryHandler :
         
         CardResponse response = mapper.Map<CardResponse>(x);
         return new ApiResponse<CardResponse>(response);
+    }
+    
+    
+    public async Task<ApiResponse<List<CardResponse>>> Handle(GetCardByAccountNumber request, CancellationToken cancellationToken)
+    {
+        List<Card> x = await unitOfWork.CardRepository.GetAsQueryable("Account")
+            .Where(x => x.AccountId == request.Id).ToListAsync(cancellationToken);
+        if (x is null)
+        {
+            return new ApiResponse<List<CardResponse>>("Error");
+        }
+        List<CardResponse> response = mapper.Map<List<CardResponse>>(x);
+        return new ApiResponse<List<CardResponse>>(response);
     }
 }

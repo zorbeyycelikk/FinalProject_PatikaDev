@@ -7,7 +7,7 @@ public class CreateBasketRequest
 
 public class BasketResponse
 {
+    public string Id { get; set; }
     public string CustomerId { get; set; }
     public bool IsActive { get; set; }
-    public virtual ICollection<BasketItemResponse> BasketItems { get; set; }
 }

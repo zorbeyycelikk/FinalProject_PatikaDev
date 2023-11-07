@@ -29,20 +29,23 @@ public class MapperConfig : Profile
         CreateMap<UpdateCardRequest, Card>();
         CreateMap<Card, CardResponse>()
             .ForMember(x => x.CardHolderId, opt => opt
-                .MapFrom(src => src.Account.CustomerId));
+                .MapFrom(src => src.Account.CustomerId))
+            .ForMember(x => x.AccountNumber, opt => opt
+                .MapFrom(src => src.Account.AccountNumber));
         
         CreateMap<CreateAccountRequest, Account>();
         CreateMap<UpdateAccountRequest, Account>();
         CreateMap<Account, AccountResponse>();
         
         CreateMap<CreateBasketRequest, Basket>();
-        CreateMap<Basket, BasketResponse>()
-            .ForMember(x => x.BasketItems, opt => opt
-                .MapFrom(src => src.BasketItems));
+        CreateMap<Basket, BasketResponse>();
         
         CreateMap<CreateBasketItemRequest, BasketItem>();
         CreateMap<BasketItem, BasketItemResponse>()
-            .ForMember(x => x.ProductName, opt => opt
-                .MapFrom(src => src.Product.Name));
+            // .ForMember(x => x.ProductName, opt => opt
+            //     .MapFrom(src => src.Product.Name))
+            .ForMember(x => x.Product, opt => opt
+                .MapFrom(src => src.Product));
+
     }
 }

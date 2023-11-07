@@ -18,7 +18,7 @@ public class CustomerController : ControllerBase
     }
     
     [HttpGet]
-    [Authorize(Roles = "admin")]
+    // [Authorize(Roles = "admin")]
     public async Task<IActionResult> Get()
     {
         var operation = new GetAllCustomerQuery();
