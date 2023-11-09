@@ -21,6 +21,8 @@ public interface IGenericRepository<TEntity> where TEntity : BaseModel
     
     Task<bool> AddRangeAsync(List<TEntity> entities,CancellationToken cancellationToken);
     
+    Task<bool> Add(TEntity entity);
+    
     void Remove(TEntity entity);
     
     void Remove(string id);

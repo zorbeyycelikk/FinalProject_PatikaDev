@@ -35,7 +35,7 @@ public class CardTransactionQueryHandler :
         
         if (x is null)
         {
-            return new ApiResponse<CardTransactionResponse>("Error");
+            return new ApiResponse<CardTransactionResponse>("Error" , false);
         }
         
         CardTransactionResponse response = mapper.Map<CardTransactionResponse>(x);

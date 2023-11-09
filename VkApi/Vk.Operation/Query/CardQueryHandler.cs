@@ -38,7 +38,7 @@ public class CardQueryHandler :
         
         if (x is null)
         {
-            return new ApiResponse<CardResponse>("Error");
+            return new ApiResponse<CardResponse>("Error" , false);
         }
         
         CardResponse response = mapper.Map<CardResponse>(x);
@@ -52,7 +52,7 @@ public class CardQueryHandler :
             .Where(x => x.AccountId == request.Id).ToListAsync(cancellationToken);
         if (x is null)
         {
-            return new ApiResponse<List<CardResponse>>("Error");
+            return new ApiResponse<List<CardResponse>>("Error" , false);
         }
         List<CardResponse> response = mapper.Map<List<CardResponse>>(x);
         return new ApiResponse<List<CardResponse>>(response);

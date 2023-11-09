@@ -35,7 +35,7 @@ public class CustomerQueryHandler :
         
         if (x is null)
         {
-            return new ApiResponse<CustomerResponse>("Error");
+            return new ApiResponse<CustomerResponse>("Error" , false);
         }
         
         CustomerResponse response = mapper.Map<CustomerResponse>(x);

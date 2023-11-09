@@ -65,6 +65,14 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         var response = await Table.AddAsync(entity,cancellationToken);
         return response.State == EntityState.Added;
     }
+    
+    public async Task<bool> Add(TEntity entity)
+    {
+        entity.InsertDate = DateTime.UtcNow;
+        entity.IsActive = true;
+        var response = Table.Add(entity);
+        return response.State == EntityState.Added;
+    }
 
     public async Task<bool> AddRangeAsync(List<TEntity> entities,CancellationToken cancellationToken)
     {
@@ -76,7 +84,7 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         await Table.AddRangeAsync(entities,cancellationToken);
         return true;
     }
-
+    
     public void Remove(TEntity entity)
     {
         entity.IsActive = false;

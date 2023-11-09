@@ -35,7 +35,7 @@ public class BasketItemQueryHandler :
         
         if (x is null)
         {
-            return new ApiResponse<BasketItemResponse>("Error");
+            return new ApiResponse<BasketItemResponse>("Error" , false);
         }
         
         BasketItemResponse response = mapper.Map<BasketItemResponse>(x);

@@ -33,18 +33,18 @@ public class TokenCommandHandler :
             .FirstOrDefaultAsync(x => x.Email == request.Model.Email, cancellationToken);
         if (entity == null)
         {
-            return new ApiResponse<TokenResponse>("Invalid user informations");
+            return new ApiResponse<TokenResponse>("Error" , false);
         }
         
         var md5 = Md5.Create(request.Model.Password.ToUpper());
         if (entity.Password != md5)
         {
-            return new ApiResponse<TokenResponse>("Invalid password informations");
+            return new ApiResponse<TokenResponse>( "Error" , false);
         }
         
         if (!entity.IsActive)
         {
-            return new ApiResponse<TokenResponse>("Invalid active user !");
+            return new ApiResponse<TokenResponse>("Error" , false);
         }
         
         string token = Token(entity);

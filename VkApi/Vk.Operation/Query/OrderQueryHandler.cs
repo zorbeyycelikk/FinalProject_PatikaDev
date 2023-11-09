@@ -35,7 +35,7 @@ public class OrderQueryHandler :
         
         if (x is null)
         {
-            return new ApiResponse<OrderResponse>("Error");
+            return new ApiResponse<OrderResponse>("Error" , false);
         }
         
         OrderResponse response = mapper.Map<OrderResponse>(x);

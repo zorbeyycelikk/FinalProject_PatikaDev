@@ -38,7 +38,7 @@ public class SessionCustomerQueryHandler :
 
         if (entity is null)
         {
-            return new ApiResponse<CustomerResponse>("Error");
+            return new ApiResponse<CustomerResponse>("Error" , false);
         }
         var mapped = mapper.Map<CustomerResponse>(entity);
         return new ApiResponse<CustomerResponse>(mapped);
@@ -52,7 +52,7 @@ public class SessionCustomerQueryHandler :
         
         if (entities == null || !entities.Any())
         {
-            return new ApiResponse<List<AccountResponse>>("Error");
+            return new ApiResponse<List<AccountResponse>>("Error" , false);
         }
         
         var mapped = mapper.Map<List<AccountResponse>>(entities);
@@ -67,7 +67,7 @@ public class SessionCustomerQueryHandler :
         
         if (entities == null || !entities.Any())
         {
-            return new ApiResponse<List<CardResponse>>("Error");
+            return new ApiResponse<List<CardResponse>>("Error" , false);
         }
         
         var mapped = mapper.Map<List<CardResponse>>(entities);
@@ -82,7 +82,7 @@ public class SessionCustomerQueryHandler :
         
         if (entities == null || !entities.Any())
         {
-            return new ApiResponse<List<BasketResponse>>("Error");
+            return new ApiResponse<List<BasketResponse>>("Error" , false);
         }
         
         var mapped = mapper.Map<List<BasketResponse>>(entities);
@@ -97,7 +97,7 @@ public class SessionCustomerQueryHandler :
         
         if (entity is null)
         {
-            return new ApiResponse<BasketResponse>("Error");
+            return new ApiResponse<BasketResponse>("Error" , false);
         }
         
         var mapped = mapper.Map<BasketResponse>(entity);
@@ -112,7 +112,7 @@ public class SessionCustomerQueryHandler :
         
         if (entities == null || !entities.Any())
         {
-            return new ApiResponse<List<BasketItemResponse>>("Error");
+            return new ApiResponse<List<BasketItemResponse>>("Error" , false);
         }
         
         var mapped = mapper.Map<List<BasketItemResponse>>(entities);
@@ -127,7 +127,7 @@ public class SessionCustomerQueryHandler :
         
         if (entities == null || !entities.Any())
         {
-            return new ApiResponse<List<BasketItemResponse>>("Error");
+            return new ApiResponse<List<BasketItemResponse>>("Error" , false);
         }
         
         var mapped = mapper.Map<List<BasketItemResponse>>(entities);
@@ -142,7 +142,7 @@ public class SessionCustomerQueryHandler :
         
         if (entities == null || !entities.Any())
         {
-            return new ApiResponse<List<OrderResponse>>("Error");
+            return new ApiResponse<List<OrderResponse>>("Error" , false);
         }
         
         var mapped = mapper.Map<List<OrderResponse>>(entities);
@@ -156,7 +156,7 @@ public class SessionCustomerQueryHandler :
         
         if (entities == null || !entities.Any())
         {
-            return new ApiResponse<List<ProductResponse>>("Error");
+            return new ApiResponse<List<ProductResponse>>("Error" , false);
         }
 
         foreach (var x in entities)

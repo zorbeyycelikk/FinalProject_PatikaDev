@@ -17,6 +17,7 @@ public class AccountTransaction : BaseModel
     public string Description { get; set; }
     public int Amount { get; set; }
     public string Who { get; set; }
+    public string PaymentMethod { get; set; } // For sender -> eft , havale // For receiver eft , havale , card
     public string Status  { get; set; }           // islem sonucuna göre olusacak
     public DateTime TransactionDate { get; set; } // islem sonucuna göre olusacak
 }

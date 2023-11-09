@@ -35,7 +35,7 @@ public class AccountQueryHandler :
         
         if (x is null)
         {
-            return new ApiResponse<AccountResponse>("Error");
+            return new ApiResponse<AccountResponse>("Error" , false);
         }
         
         AccountResponse response = mapper.Map<AccountResponse>(x);

@@ -38,7 +38,7 @@ public class ProductQueryHandler :
         
         if (x is null)
         {
-            return new ApiResponse<ProductResponse>("Error");
+            return new ApiResponse<ProductResponse>("Error" , false);
         }
         
         ProductResponse response = mapper.Map<ProductResponse>(x);

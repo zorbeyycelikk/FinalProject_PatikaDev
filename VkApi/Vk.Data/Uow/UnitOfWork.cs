@@ -21,9 +21,6 @@ public class UnitOfWork : IUnitOfWork
         BasketRepository = new GenericRepository<Basket>(dbContext);
         BasketItemRepository = new GenericRepository<BasketItem>(dbContext);
         AccountTransactionRepository = new GenericRepository<AccountTransaction>(dbContext);
-
-
-
     }
 
     public void Save()
@@ -40,5 +37,4 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<Basket> BasketRepository { get; }
     public IGenericRepository<BasketItem> BasketItemRepository { get; }
     public IGenericRepository<AccountTransaction> AccountTransactionRepository { get; }
-
 }

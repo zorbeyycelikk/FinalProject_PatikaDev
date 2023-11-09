@@ -113,19 +113,19 @@ public class Startup
         }
 
         app.UseHttpsRedirection();
-
+        
         app.UseCors(options =>
             options
                 .AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-            );
-
+        );
+        
         //Jwt
         app.UseAuthentication();
         
         app.UseRouting();
-
+        
         app.UseAuthorization();
 
         app.UseEndpoints(endpoints =>

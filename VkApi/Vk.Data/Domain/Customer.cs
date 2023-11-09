@@ -16,10 +16,8 @@ public class Customer : BaseModel
     public string Password { get; set; }
     public float  Profit { get; set; }
     
-    //public virtual ICollection<Order> Orders { get; set; } 
     public virtual ICollection<Account> Accounts { get; set; } 
     public virtual ICollection<Basket> Baskets { get; set; } 
-    
 }
 class CustomerConfigruration : IEntityTypeConfiguration<Customer>
 {
