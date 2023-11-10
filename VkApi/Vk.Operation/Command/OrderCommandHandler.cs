@@ -13,8 +13,6 @@ public class OrderCommandHandler:
     IRequestHandler<CreateOrderCommand, ApiResponse>,
     IRequestHandler<UpdateOrderCommand, ApiResponse>,
     IRequestHandler<DeleteOrderCommand, ApiResponse>
-    // IRequestHandler<CompleteOrderCommand, ApiResponse<OrderResponse>>
-
 {
     private readonly IMapper mapper;
     private readonly IUnitOfWork unitOfWork;
@@ -44,7 +42,7 @@ public class OrderCommandHandler:
             return new ApiResponse("Error");
         }
         
-        var checkStock = await CheckStock(request.Model.BasketId, cancellationToken);
+        var checkStock = await new checkStockCommand(unitOfWork).CheckStock(request.Model.BasketId, cancellationToken);
         if (!checkStock.Success)
         {
             unitOfWork.OrderRepository.AddAsync(mapped,cancellationToken);
@@ -87,38 +85,4 @@ public class OrderCommandHandler:
         
         return new ApiResponse();
     }
-    
-    // Check Basket -> Bu basketId ' ye sahip bir basket var mı ve bu basket aktif mi ? ( stock içinden çağırılır)
-    private async Task<ApiResponse<List<BasketItem>>> CheckBasket(string basketId , CancellationToken cancellationToken)
-    {
-        var basketItems = await unitOfWork.BasketItemRepository.GetAsQueryable("Product")
-            .Where(x => x.Basket.Id == basketId && x.Basket.IsActive == true).ToListAsync(cancellationToken);
-
-        // Böyle bir basket var mı ve bu basket aktif mi ?
-        if (basketItems is null)
-        {
-            return new ApiResponse<List<BasketItem>>("Error" , false);
-        }
-        return new ApiResponse<List<BasketItem>>(basketItems);
-    }
-     
-    // Check Stock -> Sepette olan ürünlerin yeterli stokları var mı?
-    private async Task<ApiResponse> CheckStock(string basketId , CancellationToken cancellationToken)
-    {
-        var x = await CheckBasket(basketId, cancellationToken);
-
-        var basketItems = x.Response;
-         
-        //Basket'de bulunan ürünlerin yeterli stokları var mı ?
-         
-        for (int i = 0; i < basketItems.Count; i++)
-        {
-            if (basketItems[i].Product.Stock < basketItems[i].Quantity)
-            {
-                return new ApiResponse("Yetersiz Stock Miktari");
-            }
-        }
-        return new ApiResponse();
-    }
-    
 }

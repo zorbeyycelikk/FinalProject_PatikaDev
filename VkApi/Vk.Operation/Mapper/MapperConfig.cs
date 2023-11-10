@@ -58,11 +58,10 @@ public class MapperConfig : Profile
         //     .ForSourceMember(src => src.AccountNumber, opt => opt.DoNotValidate())
         //     .ForSourceMember(src => src.SenderAccountNumber, opt => opt.DoNotValidate());
 
-    //     CreateMap<CreateCompleteOrderWithHavaleRequest, CreatePaymentByHavaleRequest>()
-    //         .ForSourceMember(src => src.CustomerId, opt => opt.DoNotValidate())
-    //         .ForSourceMember(src => src.Address, opt => opt.DoNotValidate())
-    //         .ForSourceMember(src => src.BasketId, opt => opt.DoNotValidate())
-    //         .ForSourceMember(src => src.PaymentMethod, opt => opt.DoNotValidate());
-    //
+    CreateMap<CreateCompleteOrderWithHavaleRequest, CreatePaymentByHavaleRequest>()
+        .ForSourceMember(src => src.CustomerId, opt => opt.DoNotValidate())
+        .ForSourceMember(src => src.Address, opt => opt.DoNotValidate())
+        .ForSourceMember(src => src.BasketId, opt => opt.DoNotValidate())
+        .ForSourceMember(src => src.PaymentMethod, opt => opt.DoNotValidate());
     }
 }

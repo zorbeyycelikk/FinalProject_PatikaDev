@@ -24,6 +24,7 @@ public class CompleteOrderWithPaymentMethods : ControllerBase
         this.mediator = mediator;
     }
             
+    // Havale yöntemi ile sipariş başarılı , başarısız şekilde oluşturulur
     [HttpPost("CompleteOrderWithHavale")]
     public async Task<IActionResult> CompleteOrderWithHavale([FromBody] CreateCompleteOrderWithHavaleRequest request)
     {
