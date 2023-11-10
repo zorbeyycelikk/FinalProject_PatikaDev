@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Vk.Api.Middleware;
+using Vk.Base.Logger;
 using Vk.Base.Token;
 using Vk.Data.Context;
 using Vk.Data.Uow;
@@ -111,9 +114,19 @@ public class Startup
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Vk.Api v1"));
         }
+        
+        app.UseMiddleware<ErrorHandlerMiddleware>();
+        Action<RequestProfilerModel> requestResponseHandler = requestProfilerModel =>
+        {
+            Log.Information("-------------Request-Begin------------");
+            Log.Information(requestProfilerModel.Request);
+            Log.Information(Environment.NewLine);
+            Log.Information(requestProfilerModel.Response);
+            Log.Information("-------------Request-End------------");
+        };
+        app.UseMiddleware<RequestLoggingMiddleware>(requestResponseHandler);
 
         app.UseHttpsRedirection();
-        
         app.UseCors(options =>
             options
                 .AllowAnyOrigin()
