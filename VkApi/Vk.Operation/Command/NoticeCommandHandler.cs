@@ -1,18 +1,16 @@
 using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Vk.Base.Response;
 using Vk.Data.Domain;
 using Vk.Data.Uow;
 using Vk.Operation.Cqrs;
-using Vk.Schema;
 
 namespace Vk.Operation.Command;
 
 public class NoticeCommandHandler:
-    IRequestHandler<NoticeCqrs.CreateNoticeCommand, ApiResponse>,
-    IRequestHandler<NoticeCqrs.UpdateNoticeCommand, ApiResponse>,
-    IRequestHandler<NoticeCqrs.DeleteNoticeCommand, ApiResponse>
+    IRequestHandler<CreateNoticeCommand, ApiResponse>,
+    IRequestHandler<UpdateNoticeCommand, ApiResponse>,
+    IRequestHandler<DeleteNoticeCommand, ApiResponse>
 {
     private readonly IMapper mapper;
     private readonly IUnitOfWork unitOfWork;
@@ -23,7 +21,7 @@ public class NoticeCommandHandler:
         this.mapper = mapper;
     }
 
-    public async Task<ApiResponse> Handle(NoticeCqrs.CreateNoticeCommand request, CancellationToken cancellationToken)
+    public async Task<ApiResponse> Handle(CreateNoticeCommand request, CancellationToken cancellationToken)
     {
         Notice mapped = mapper.Map<Notice>(request.Model);
         mapped.Id = mapped.MakeId(mapped.Id);
@@ -34,7 +32,7 @@ public class NoticeCommandHandler:
         return new ApiResponse();
     }
 
-    public async Task<ApiResponse> Handle(NoticeCqrs.UpdateNoticeCommand request, CancellationToken cancellationToken)
+    public async Task<ApiResponse> Handle(UpdateNoticeCommand request, CancellationToken cancellationToken)
     {
         var entity = await unitOfWork.NoticeRepository.GetById(request.Id, cancellationToken);
         if (entity is null)
@@ -51,7 +49,7 @@ public class NoticeCommandHandler:
         return new ApiResponse();
     }
 
-    public async Task<ApiResponse> Handle(NoticeCqrs.DeleteNoticeCommand request, CancellationToken cancellationToken)
+    public async Task<ApiResponse> Handle(DeleteNoticeCommand request, CancellationToken cancellationToken)
     {
         var entity = await unitOfWork.NoticeRepository.GetById(request.Id, cancellationToken);
         if (entity is null)
