@@ -41,6 +41,14 @@ public class OrderController : ControllerBase
         return result.Success ? Ok(result.Message) : result.Message == "Error" ? Conflict() : BadRequest();
     }
     
+    [HttpPost("CancelledWithOrderNumber/{id}")]
+    public async  Task<IActionResult> CancelledWithOrderNumber(string id)
+    {
+        var operation = new CancelledWithOrderNumberCommand(id);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
     [HttpPut("{id}")]
     public async  Task<IActionResult> Put(string id, [FromBody] UpdateOrderRequest request)
     {
@@ -73,11 +81,4 @@ public class OrderController : ControllerBase
         return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
-    [HttpPost("CancelledWithOrderNumber/{id}")]
-    public async  Task<IActionResult> CancelledWithOrderNumber(string id)
-    {
-        var operation = new CancelledWithOrderNumberCommand(id);
-        var result = await mediator.Send(operation);
-        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
-    }
 }

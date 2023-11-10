@@ -22,6 +22,7 @@ public class VkDbContext : DbContext
         modelBuilder.ApplyConfiguration(new CardTransactionConfigruration());
         modelBuilder.ApplyConfiguration(new AccountTransactionConfigruration());
         modelBuilder.ApplyConfiguration(new OpenAccountTransactionConfigruration());
+        modelBuilder.ApplyConfiguration(new NoticeConfigruration());
         
         base.OnModelCreating(modelBuilder);
     }

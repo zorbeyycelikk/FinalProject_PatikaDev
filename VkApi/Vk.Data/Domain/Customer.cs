@@ -15,10 +15,13 @@ public class Customer : BaseModel
     public string Role  { get; set; } // admin or bayi  | default value bayi
     public string Password { get; set; }
     public decimal  Profit { get; set; }
+    public decimal maxOpenAccountLimit { get; set; }
     public decimal openAccountLimit { get; set; }
+    
     public virtual ICollection<Account> Accounts { get; set; } 
     public virtual ICollection<Basket> Baskets { get; set; } 
     public virtual ICollection<OpenAccountTransaction> OpenAccountTransactions { get; set; } 
+    public virtual ICollection<Notice> Notices { get; set; } 
 
 }
 class CustomerConfigruration : IEntityTypeConfiguration<Customer>
@@ -46,6 +49,12 @@ class CustomerConfigruration : IEntityTypeConfiguration<Customer>
         builder.HasMany(c => c.Baskets)
             .WithOne(a => a.Customer)
             .HasForeignKey(a => a.CustomerId)
+            .HasPrincipalKey(c => c.Id)
+            .IsRequired(true);
+        
+        builder.HasMany(c => c.Notices)
+            .WithOne(a => a.Customer)
+            .HasForeignKey(a =>a.ReceiverId)
             .HasPrincipalKey(c => c.Id)
             .IsRequired(true);
     }

@@ -56,14 +56,6 @@ public class ProductController : ControllerBase
         return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteById(string id)
-    {
-        var operation = new DeleteProductCommand(id);
-        var result = await mediator.Send(operation);
-        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
-    }
-    
     [HttpPut("ProductStockAfterCreateOrder")]
     public async  Task<IActionResult> UpdateProductStockAfterCreateOrder(string basketId)
     {
@@ -76,6 +68,14 @@ public class ProductController : ControllerBase
     public async  Task<IActionResult> UpdateProductStockAfterCancelledOrder(string basketId)
     {
         var operation = new UpdateProductStockAfterCancelledOrderCommand(basketId);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteById(string id)
+    {
+        var operation = new DeleteProductCommand(id);
         var result = await mediator.Send(operation);
         return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
     }

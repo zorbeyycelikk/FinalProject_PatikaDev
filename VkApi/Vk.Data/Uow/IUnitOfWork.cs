@@ -16,6 +16,7 @@ public interface IUnitOfWork
     IGenericRepository<BasketItem> BasketItemRepository { get; } 
     IGenericRepository<AccountTransaction> AccountTransactionRepository { get; } 
     IGenericRepository<OpenAccountTransaction> OpenAccountTransactionRepository { get; } 
+    IGenericRepository<Notice> NoticeRepository { get; } 
 
 
 }

@@ -48,15 +48,12 @@ public class MapperConfig : Profile
                 .MapFrom(src => src.Product));
         
         CreateMap<CreatePaymentByCardRequest, PaymentByCardResponse>();
-        
         CreateMap<CreatePaymentByEftRequest, PaymentByEftResponse>();
         CreateMap<CreatePaymentByHavaleRequest, PaymentByHavaleResponse>();
         CreateMap<CreatePaymentByOpenAccountRequest, PaymentByOpenAccountResponse>();
 
-        // CreateMap<CreateCompleteOrderWithHavaleRequest, CreateOrderRequest>()
-        //     .ForSourceMember(src => src.Name, opt => opt.DoNotValidate())
-        //     .ForSourceMember(src => src.AccountNumber, opt => opt.DoNotValidate())
-        //     .ForSourceMember(src => src.SenderAccountNumber, opt => opt.DoNotValidate());
+        CreateMap<CreateNoticeRequest, Notice>();
+        CreateMap<Notice, NoticeResponse>();
 
     CreateMap<CreateCompleteOrderWithHavaleRequest, CreatePaymentByHavaleRequest>()
         .ForSourceMember(src => src.CustomerId, opt => opt.DoNotValidate())
