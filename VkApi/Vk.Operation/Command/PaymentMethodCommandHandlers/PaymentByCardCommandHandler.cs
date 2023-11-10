@@ -1,7 +1,6 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Vk.Base.Encryption;
 using Vk.Base.Response;
 using Vk.Data.Domain;
 using Vk.Data.Uow;
@@ -81,7 +80,7 @@ public class PaymentByCardCommandHandler:
     receiverTransaction.AccountNumber = senderAccount.AccountNumber;
     receiverTransaction.IBAN = senderAccount.IBAN;
     receiverTransaction.Name = senderAccount.Name;
-    receiverTransaction.Description = "Card Payment";
+    receiverTransaction.TransferDescription = "Card Payment";
     receiverTransaction.Amount = request.Model.Amount;
     receiverTransaction.Who = "Receiver";
     receiverTransaction.PaymentMethod = "Card";

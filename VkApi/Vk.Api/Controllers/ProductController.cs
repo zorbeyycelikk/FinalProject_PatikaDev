@@ -63,4 +63,20 @@ public class ProductController : ControllerBase
         var result = await mediator.Send(operation);
         return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
     }
+    
+    [HttpPut("ProductStockAfterCreateOrder")]
+    public async  Task<IActionResult> UpdateProductStockAfterCreateOrder(string basketId)
+    {
+        var operation = new UpdateProductStockAfterCreateOrderCommand(basketId);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
+    [HttpPut("ProductStockAfterCancelledOrder")]
+    public async  Task<IActionResult> UpdateProductStockAfterCancelledOrder(string basketId)
+    {
+        var operation = new UpdateProductStockAfterCancelledOrderCommand(basketId);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
 }

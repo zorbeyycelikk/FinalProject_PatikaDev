@@ -7,18 +7,18 @@ using Vk.Schema;
 
 namespace Vk.Operation.Command.CompleteOrderWithPaymentMethodsCommandHandlers;
 
-public class CompleteOrderWithHavaleTransferCommandHandler:
-     IRequestHandler<CompleteOrderWithHavaleTransfer, ApiResponse>
+public class CompleteOrderWithCardTransferCommandHandler:
+     IRequestHandler<CompleteOrderWithCardTransfer, ApiResponse>
      
  {
      private readonly IUnitOfWork unitOfWork;
      private readonly IMediator mediator;
      
-     private PaymentByHavaleTransferCommandHandler havale;
+     private PaymentByCardCommandHandler Card;
      private OrderCommandHandler order;
      private checkStockCommand checkStock;
      
-     public CompleteOrderWithHavaleTransferCommandHandler(
+     public CompleteOrderWithCardTransferCommandHandler(
          IUnitOfWork unitOfWork,
          IMediator mediator
          )
@@ -27,8 +27,8 @@ public class CompleteOrderWithHavaleTransferCommandHandler:
          this.mediator = mediator;
      }
 
-     public async Task<ApiResponse> Handle(CompleteOrderWithHavaleTransfer request, CancellationToken cancellationToken)
-     {
+     public async Task<ApiResponse> Handle(CompleteOrderWithCardTransfer request, CancellationToken cancellationToken)
+     { 
          var checkCustomer = await CheckCustomer(request.Model.CustomerId, cancellationToken);
 
          if (!checkCustomer.Success)
@@ -44,16 +44,16 @@ public class CompleteOrderWithHavaleTransferCommandHandler:
          }
          
          // Ödeme İslemi
-         CreatePaymentByHavaleRequest havReq = new CreatePaymentByHavaleRequest
+         CreatePaymentByCardRequest CardReq = new CreatePaymentByCardRequest
          {
-             SenderAccountNumber = request.Model.SenderAccountNumber,
-             AccountNumber = request.Model.AccountNumber,
-             Name = request.Model.Name,
-             TransferDescription = request.Model.TransferDescription,
+             receiverAccountNumber = request.Model.receiverAccountNumber,
+             CardNumber = request.Model.CardNumber,
+             Cvv = request.Model.Cvv,
+             ExpiryDate = request.Model.ExpiryDate,
              Amount = request.Model.Amount
          };
-         
-         var resultPayment = await mediator.Send(new CreatePaymentByHavaleTransferCommand(havReq));
+
+         var resultPayment = await mediator.Send(new CreatePaymentCardTransferCommand(CardReq));
 
          var orderRequest = manuelMapping(request.Model.CustomerId, request.Model.Description,
              request.Model.Address, request.Model.PaymentMethod,
@@ -63,13 +63,12 @@ public class CompleteOrderWithHavaleTransferCommandHandler:
          {
              // Basket silinecek
              unitOfWork.BasketRepository.Remove(request.Model.BasketId);
-             orderRequest.PaymentRefCode = resultPayment.Response.refNumber;
-             var x = await mediator.Send(new CreateOrderCommand(orderRequest));
+             orderRequest.PaymentRefCode = resultPayment.Response.transactionRefNumber;
+             await mediator.Send(new CreateOrderCommand(orderRequest));
              await mediator.Send(new UpdateProductStockAfterCreateOrderCommand(request.Model.BasketId));
              return new ApiResponse();
          }
          orderRequest.PaymentRefCode = " ";
-         // Ödeme geri yapılmalı
          await mediator.Send(new CreateOrderCommand(orderRequest));
 
          return new ApiResponse("Error");

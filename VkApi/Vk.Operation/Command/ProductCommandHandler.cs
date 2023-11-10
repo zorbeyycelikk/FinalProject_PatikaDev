@@ -11,6 +11,8 @@ namespace Vk.Operation.Command;
 public class ProductCommandHandler:
     IRequestHandler<CreateProductCommand, ApiResponse>,
     IRequestHandler<UpdateProductCommand, ApiResponse>,
+    IRequestHandler<UpdateProductStockAfterCreateOrderCommand, ApiResponse>,
+    IRequestHandler<UpdateProductStockAfterCancelledOrderCommand, ApiResponse>,
     IRequestHandler<DeleteProductCommand, ApiResponse>
 {
     private readonly IMapper mapper;
@@ -61,6 +63,45 @@ public class ProductCommandHandler:
         unitOfWork.ProductRepository.Remove(request.Id);
         unitOfWork.Save();
         
+        return new ApiResponse();
+    }
+
+
+    public async Task<ApiResponse> Handle(UpdateProductStockAfterCreateOrderCommand request, CancellationToken cancellationToken)
+    {
+        var basketItemList = await unitOfWork.BasketItemRepository.GetAsQueryable("Basket" , "Product")
+            .Where(x => x.Basket.Id == request.basketId).ToListAsync(cancellationToken);
+
+        if (!basketItemList.Any())
+        {
+            return new ApiResponse("Error");
+        }
+
+        for (int i = 0; i < basketItemList.Count; i++)
+        {
+            basketItemList[i].Product.Stock -= basketItemList[i].Quantity;
+            unitOfWork.ProductRepository.Update(basketItemList[i].Product);
+        }
+        unitOfWork.Save();
+        return new ApiResponse();
+    }
+    
+    public async Task<ApiResponse> Handle(UpdateProductStockAfterCancelledOrderCommand request, CancellationToken cancellationToken)
+    {
+        var basketItemList = await unitOfWork.BasketItemRepository.GetAsQueryable("Basket" , "Product")
+            .Where(x => x.Basket.Id == request.basketId).ToListAsync(cancellationToken);
+
+        if (!basketItemList.Any())
+        {
+            return new ApiResponse("Error");
+        }
+
+        for (int i = 0; i < basketItemList.Count; i++)
+        {
+            basketItemList[i].Product.Stock += basketItemList[i].Quantity;
+            unitOfWork.ProductRepository.Update(basketItemList[i].Product);
+        }
+        unitOfWork.Save();
         return new ApiResponse();
     }
 }

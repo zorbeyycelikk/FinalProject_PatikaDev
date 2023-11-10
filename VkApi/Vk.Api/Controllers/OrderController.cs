@@ -57,12 +57,27 @@ public class OrderController : ControllerBase
         return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
-    // [HttpPost("CompleteOrderCqrs")]
-    // public async Task<IActionResult> CompleteOrder([FromBody] CreateCompleteOrderWithHavaleRequest request)
-    // {
-    //     var operation = new CompleteOrderCqrs.CompleteOrderWithHavale(request);
-    //     var result = await mediator.Send(operation);
-    //     return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
-    // }
+    [HttpPut("ConfirmWithOrderNumber/{id}")]
+    public async  Task<IActionResult> ConfirmWithOrderNumber(string id)
+    {
+        var operation = new ConfirmWithOrderNumberCommand(id);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
     
+    [HttpPut("ConfirmWithId/{id}")]
+    public async  Task<IActionResult> ConfirmWithId(string id)
+    {
+        var operation = new ConfirmWithIdCommand(id);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
+    [HttpPost("CancelledWithOrderNumber/{id}")]
+    public async  Task<IActionResult> CancelledWithOrderNumber(string id)
+    {
+        var operation = new CancelledWithOrderNumberCommand(id);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
 }

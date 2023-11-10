@@ -53,10 +53,10 @@ public class PaymentByEftTransferCommandHandler:
         senderTransaction.AccountNumber = receiverAccount.AccountNumber;
         senderTransaction.IBAN = receiverAccount.IBAN;
         senderTransaction.Name = receiverAccount.Name;
-        senderTransaction.Description = request.Model.Description;
+        senderTransaction.TransferDescription = request.Model.TransferDescription;
         senderTransaction.Amount = request.Model.Amount;
         senderTransaction.Who = "Sender";
-        senderTransaction.PaymentMethod = "Havale";
+        senderTransaction.PaymentMethod = "EFT";
         senderTransaction.Status = status;
         senderTransaction.TransactionDate = DateTime.UtcNow;
         
@@ -67,7 +67,7 @@ public class PaymentByEftTransferCommandHandler:
         receiverTransaction.AccountNumber = senderAccount.AccountNumber;
         receiverTransaction.IBAN = senderAccount.IBAN;
         receiverTransaction.Name = senderAccount.Name;
-        receiverTransaction.Description = request.Model.Description;
+        receiverTransaction.TransferDescription = request.Model.TransferDescription;
         receiverTransaction.Amount = request.Model.Amount;
         receiverTransaction.Who = "Receiver";
         receiverTransaction.PaymentMethod = "EFT";

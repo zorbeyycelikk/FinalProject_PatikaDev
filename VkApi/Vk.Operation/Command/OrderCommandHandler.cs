@@ -12,18 +12,26 @@ namespace Vk.Operation.Command;
 public class OrderCommandHandler:
     IRequestHandler<CreateOrderCommand, ApiResponse>,
     IRequestHandler<UpdateOrderCommand, ApiResponse>,
-    IRequestHandler<DeleteOrderCommand, ApiResponse>
+    IRequestHandler<DeleteOrderCommand, ApiResponse>,
+    IRequestHandler<ConfirmWithOrderNumberCommand , ApiResponse>,
+    IRequestHandler<ConfirmWithIdCommand , ApiResponse>,
+    IRequestHandler<CancelledWithOrderNumberCommand , ApiResponse>
+
+
 {
+    private readonly IMediator mediator;
     private readonly IMapper mapper;
     private readonly IUnitOfWork unitOfWork;
-    
+    private PaymentByHavaleTransferCommandHandler havale;
     public OrderCommandHandler(
         IMapper mapper,
-        IUnitOfWork unitOfWork
+        IUnitOfWork unitOfWork,
+        IMediator mediator
         )
     {
         this.unitOfWork = unitOfWork;
         this.mapper = mapper;
+        this.mediator = mediator;
     }
 
     public async Task<ApiResponse> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -83,6 +91,134 @@ public class OrderCommandHandler:
         unitOfWork.OrderRepository.Remove(request.Id);
         unitOfWork.Save();
         
+        return new ApiResponse();
+    }
+
+    public async Task<ApiResponse> Handle(ConfirmWithOrderNumberCommand request, CancellationToken cancellationToken)
+    {
+        var x = await unitOfWork.OrderRepository.GetAsQueryable()
+            .Where(x => x.OrderNumber == request.orderNumber && x.Status == "Basarili")
+            .SingleOrDefaultAsync(cancellationToken);
+        
+        if (x is null)
+        {
+            return new ApiResponse("Error");
+        }
+        
+        x.Status = "Confirm";
+        unitOfWork.OrderRepository.Update(x);
+        unitOfWork.Save();
+        return new ApiResponse();
+    }
+    
+    public async Task<ApiResponse> Handle(ConfirmWithIdCommand request, CancellationToken cancellationToken)
+    {
+        var x = await unitOfWork.OrderRepository.GetAsQueryable()
+            .Where(x => x.Id == request.id && x.Status == "Basarili")
+            .SingleOrDefaultAsync(cancellationToken);
+        
+        if (x is null)
+        {
+            return new ApiResponse("Error");
+        }
+        
+        x.Status = "Confirm";
+        unitOfWork.OrderRepository.Update(x);
+        unitOfWork.Save();
+        return new ApiResponse();
+    }
+
+    public async Task<ApiResponse> Handle(CancelledWithOrderNumberCommand request, CancellationToken cancellationToken)
+    {
+        var x = await unitOfWork.OrderRepository.GetAsQueryable()
+            .Where(x => x.OrderNumber == request.orderNumber && x.Status == "Basarili")
+            .SingleOrDefaultAsync(cancellationToken);
+       
+        if (x is null)
+        {
+            return new ApiResponse("Error");
+        }
+
+        x.Status = "Cancelled";
+        
+        if (x.PaymentMethod == "EFT" || x.PaymentMethod == "Havale")
+        {
+           var paymentEft = await cancelledForEftOrHavale(x.PaymentRefCode, cancellationToken);
+           if (!paymentEft.Success)
+           {
+               return new ApiResponse("Error");
+           }
+        }
+
+        if (x.PaymentMethod == "Card")
+        {
+            var paymentEft = await cancelledForCard(x.PaymentRefCode, cancellationToken);
+            if (!paymentEft.Success)
+            {
+                return new ApiResponse("Error");
+            }
+        }
+        
+        
+        await mediator.Send(new UpdateProductStockAfterCancelledOrderCommand(x.BasketId));
+        return new ApiResponse();
+    }
+    
+    private async Task<ApiResponse> cancelledForEftOrHavale(string refNumber , CancellationToken cancellationToken)
+    {
+        var senderAccount = await unitOfWork.AccountTransactionRepository.GetAsQueryable("Account")
+            .Where(x => x.refNumber == refNumber && x.Who == "Sender").SingleOrDefaultAsync(cancellationToken);
+        
+        var receiverAccount =await unitOfWork.AccountTransactionRepository.GetAsQueryable("Account")
+            .Where(x => x.refNumber == refNumber && x.Who == "Receiver").SingleOrDefaultAsync(cancellationToken);
+
+        // Ödeme İslemi
+        CreatePaymentByHavaleRequest havReq = new CreatePaymentByHavaleRequest
+        {
+            SenderAccountNumber = senderAccount.AccountNumber,
+            AccountNumber = receiverAccount.AccountNumber,
+            Name = receiverAccount.Name,
+            TransferDescription = "Return of " + refNumber,
+            Amount = senderAccount.Amount
+        };
+        var resultPayment = await mediator.Send(new CreatePaymentByHavaleTransferCommand(havReq));
+        if (!resultPayment.Success)
+        {
+            return new ApiResponse("Error");
+        }
+        return new ApiResponse();
+    }
+    
+    private async Task<ApiResponse> cancelledForCard(string refNumber , CancellationToken cancellationToken)
+    {
+        var receiverCardTransaction = await unitOfWork.CardTransactionRepository
+            .GetAsQueryable("Card")
+            .Where(x => x.transactionRefNumber == refNumber && x.Status == "Successful")
+            .SingleOrDefaultAsync(cancellationToken);
+        
+        var receiverCardInfo = await unitOfWork.CardRepository.GetAsQueryable("Account")
+            .Where(x => x.Id== receiverCardTransaction.CardId)
+            .SingleOrDefaultAsync(cancellationToken);
+
+        var receiverAccount = await unitOfWork.AccountRepository.GetById(receiverCardInfo.AccountId, cancellationToken, "Customer","Card");
+        
+        var senderAccount =await unitOfWork.AccountTransactionRepository.GetAsQueryable("Account")
+            .Where(x => x.refNumber == refNumber && x.Who == "Receiver").SingleOrDefaultAsync(cancellationToken);
+
+        // Ödeme İslemi
+        CreatePaymentByHavaleRequest havReq = new CreatePaymentByHavaleRequest
+        {
+            SenderAccountNumber = senderAccount.AccountNumber,
+            AccountNumber = receiverAccount.AccountNumber,
+            Name = receiverAccount.Name,
+            TransferDescription = "Return of " + refNumber,
+            Amount = senderAccount.Amount
+        };
+        var resultPayment = await mediator.Send(new CreatePaymentByHavaleTransferCommand(havReq));
+        if (!resultPayment.Success)
+        {
+            return new ApiResponse("Error");
+        }
         return new ApiResponse();
     }
 }

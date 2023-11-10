@@ -8,6 +8,9 @@ public record CreateProductCommand(CreateProductRequest Model) : IRequest<ApiRes
 public record UpdateProductCommand(UpdateProductRequest Model,string Id) : IRequest<ApiResponse>;
 public record DeleteProductCommand(string Id) : IRequest<ApiResponse>;
 
+public record UpdateProductStockAfterCreateOrderCommand(string basketId) : IRequest<ApiResponse>;
+public record UpdateProductStockAfterCancelledOrderCommand(string basketId) : IRequest<ApiResponse>;
+
 public record GetAllProductQuery() : IRequest<ApiResponse<List<ProductResponse>>>;
 public record GetProductById(string Id) : IRequest<ApiResponse<ProductResponse>>;
 public record GetAllUniqueProductCategoryNamesQuery() : IRequest<ApiResponse<List<string>>>;

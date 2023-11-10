@@ -1,12 +1,6 @@
-using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Vk.Base.Response;
-using Vk.Operation;
 using Vk.Operation.Command.CompleteOrderWithPaymentMethodsCommandHandlers;
-using Vk.Operation.Cqrs;
 using Vk.Operation.Cqrs.CompleteOrderWithPaymentMethodsCqrs;
 using Vk.Schema;
 
@@ -29,6 +23,33 @@ public class CompleteOrderWithPaymentMethods : ControllerBase
     public async Task<IActionResult> CompleteOrderWithHavale([FromBody] CreateCompleteOrderWithHavaleRequest request)
     {
         var operation = new CompleteOrderWithHavaleTransfer(request);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
+    // Havale yöntemi ile sipariş başarılı , başarısız şekilde oluşturulur
+    [HttpPost("CompleteOrderWithEft")]
+    public async Task<IActionResult> CompleteOrderWithEft([FromBody] CreateCompleteOrderWithEftRequest request)
+    {
+        var operation = new CompleteOrderWithEftTransfer(request);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
+    // Card yöntemi ile sipariş başarılı , başarısız şekilde oluşturulur
+    [HttpPost("CompleteOrderWithCard")]
+    public async Task<IActionResult> CompleteOrderWithEft([FromBody] CreateCompleteOrderWithCardRequest request)
+    {
+        var operation = new CompleteOrderWithCardTransfer(request);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
+    // Card yöntemi ile sipariş başarılı , başarısız şekilde oluşturulur
+    [HttpPost("CompleteOrderWithOpenAccount")]
+    public async Task<IActionResult> CompleteOrderWithOpenAccount([FromBody] CreateCompleteOrderWithOpenAccountRequest request)
+    {
+        var operation = new CompleteOrderWithOpenAccountTransfer(request);
         var result = await mediator.Send(operation);
         return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
     }

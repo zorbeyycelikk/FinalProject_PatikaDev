@@ -23,7 +23,7 @@ public class PaymentByHavaleTransferCommandHandler:
 
     public async Task<ApiResponse<PaymentByHavaleResponse>> Handle(CreatePaymentByHavaleTransferCommand request, CancellationToken cancellationToken)
     {
-        // böyle bir iban numarasına sahip aktif bir hesap ve alıcı ismi ile eşleşen hesap var mı ?
+        // böyle bir account numarasına sahip aktif bir hesap ve alıcı ismi ile eşleşen hesap var mı ?
         var checkreceiverAccount  = await CheckAccount(request.Model.AccountNumber , request.Model.Name, cancellationToken);
         
         if (!checkreceiverAccount.Success)
@@ -31,17 +31,15 @@ public class PaymentByHavaleTransferCommandHandler:
             return new ApiResponse<PaymentByHavaleResponse>(checkreceiverAccount.Message);
         }
 
-        var senderAccount = await unitOfWork.AccountRepository.GetAsQueryable()
-            .Where(x => x.AccountNumber == request.Model.SenderAccountNumber).SingleOrDefaultAsync(cancellationToken);
-
+        var responseCheckBalance = await CheckBalance(request.Model.SenderAccountNumber, request.Model.Amount, cancellationToken);
         // Ödemek için yeterli miktarda para yoktur.
-        if (senderAccount.Balance < request.Model.Amount)
+        if (!responseCheckBalance.Success)
         {
             return new ApiResponse<PaymentByHavaleResponse>("Error", false);
         }
-
-        var receiverAccount = checkreceiverAccount.Response;
         
+        var receiverAccount = checkreceiverAccount.Response;
+        var senderAccount = responseCheckBalance.Response;
         receiverAccount.Balance = receiverAccount.Balance + request.Model.Amount;
         senderAccount.Balance = senderAccount.Balance - request.Model.Amount;
         
@@ -55,7 +53,7 @@ public class PaymentByHavaleTransferCommandHandler:
         senderTransaction.AccountNumber = receiverAccount.AccountNumber;
         senderTransaction.IBAN = receiverAccount.IBAN;
         senderTransaction.Name = receiverAccount.Name;
-        senderTransaction.Description = request.Model.Description;
+        senderTransaction.TransferDescription = request.Model.TransferDescription;
         senderTransaction.Amount = request.Model.Amount;
         senderTransaction.Who = "Sender";
         senderTransaction.PaymentMethod = "Havale";
@@ -69,7 +67,7 @@ public class PaymentByHavaleTransferCommandHandler:
         receiverTransaction.AccountNumber = senderAccount.AccountNumber;
         receiverTransaction.IBAN = senderAccount.IBAN;
         receiverTransaction.Name = senderAccount.Name;
-        receiverTransaction.Description = request.Model.Description;
+        receiverTransaction.TransferDescription = request.Model.TransferDescription;
         receiverTransaction.Amount = request.Model.Amount;
         receiverTransaction.Who = "Receiver";
         receiverTransaction.PaymentMethod = "Havale";
@@ -86,6 +84,19 @@ public class PaymentByHavaleTransferCommandHandler:
         response.Status = status;
         
         return new ApiResponse<PaymentByHavaleResponse>(response); // değişecek
+    }
+
+    public async Task<ApiResponse<Account>> CheckBalance(string accountNumber,decimal amount , CancellationToken cancellationToken)
+    {
+        var account = await unitOfWork.AccountRepository.GetAsQueryable()
+            .Where(x => x.AccountNumber == accountNumber).SingleOrDefaultAsync(cancellationToken);
+
+        // Ödemek için yeterli miktarda para yoktur.
+        if (account.Balance < amount)
+        {
+            return new ApiResponse<Account>("Error", false);
+        }
+        return new ApiResponse<Account>(account);
     }
 
     private async Task<ApiResponse<Account>> CheckAccount(string accountNumber, string name ,CancellationToken cancellationToken)
