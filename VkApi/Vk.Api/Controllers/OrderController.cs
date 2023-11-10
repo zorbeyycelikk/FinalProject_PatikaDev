@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Vk.Base.Response;
 using Vk.Operation.Cqrs;
 using Vk.Schema;
 
@@ -55,5 +56,13 @@ public class OrderController : ControllerBase
         var result = await mediator.Send(operation);
         return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
     }
+    
+    // [HttpPost("CompleteOrderCqrs")]
+    // public async Task<IActionResult> CompleteOrder([FromBody] CreateCompleteOrderWithHavaleRequest request)
+    // {
+    //     var operation = new CompleteOrderCqrs.CompleteOrderWithHavale(request);
+    //     var result = await mediator.Send(operation);
+    //     return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
+    // }
     
 }

@@ -14,10 +14,12 @@ public class Customer : BaseModel
     public string Phone { get; set; }
     public string Role  { get; set; } // admin or bayi  | default value bayi
     public string Password { get; set; }
-    public float  Profit { get; set; }
-    
+    public decimal  Profit { get; set; }
+    public decimal openAccountLimit { get; set; }
     public virtual ICollection<Account> Accounts { get; set; } 
     public virtual ICollection<Basket> Baskets { get; set; } 
+    public virtual ICollection<OpenAccountTransaction> OpenAccountTransactions { get; set; } 
+
 }
 class CustomerConfigruration : IEntityTypeConfiguration<Customer>
 {

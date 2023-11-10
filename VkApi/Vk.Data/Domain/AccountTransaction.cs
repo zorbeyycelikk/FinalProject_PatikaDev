@@ -12,10 +12,11 @@ public class AccountTransaction : BaseModel
     public virtual Account Account { get; set; }
     
     public string refNumber { get; set; } // otomatik oluşacak
+    public string AccountNumber { get; set; }
     public string IBAN { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
-    public int Amount { get; set; }
+    public decimal Amount { get; set; }
     public string Who { get; set; }
     public string PaymentMethod { get; set; } // For sender -> eft , havale // For receiver eft , havale , card
     public string Status  { get; set; }           // islem sonucuna göre olusacak
@@ -34,7 +35,8 @@ public class AccountTransactionConfigruration : IEntityTypeConfiguration<Account
         builder.Property(x => x.IBAN).IsRequired().HasMaxLength(34);
         builder.Property(x => x.Name).IsRequired().HasPrecision(18,2).HasDefaultValue(0);
         builder.Property(x => x.Description).IsRequired();
-        builder.Property(x => x.Amount).IsRequired();
+        builder.Property(x => x.Amount).IsRequired().HasPrecision(18, 2);
+
 
         builder.HasIndex(x => x.refNumber);
     }

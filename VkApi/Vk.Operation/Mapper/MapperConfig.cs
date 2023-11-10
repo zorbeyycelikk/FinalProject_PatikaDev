@@ -17,9 +17,7 @@ public class MapperConfig : Profile
         CreateMap<UpdateOrderRequest, Order>();
         CreateMap<Order, OrderResponse>()
             .ForMember(x => x.BasketItems, opt => opt
-                .MapFrom(src => src.Basket.BasketItems))
-            .ForMember(x => x.CustomerId, opt => opt
-                .MapFrom(src => src.Basket.CustomerId));
+                .MapFrom(src => src.Basket.BasketItems));
         
         CreateMap<CreateProductRequest, Product>();
         CreateMap<UpdateProductRequest, Product>();
@@ -52,6 +50,19 @@ public class MapperConfig : Profile
         CreateMap<CreatePaymentByCardRequest, PaymentByCardResponse>();
         
         CreateMap<CreatePaymentByEftRequest, PaymentByEftResponse>();
+        CreateMap<CreatePaymentByHavaleRequest, PaymentByHavaleResponse>();
+        CreateMap<CreatePaymentByOpenAccountRequest, PaymentByOpenAccountResponse>();
 
+        // CreateMap<CreateCompleteOrderWithHavaleRequest, CreateOrderRequest>()
+        //     .ForSourceMember(src => src.Name, opt => opt.DoNotValidate())
+        //     .ForSourceMember(src => src.AccountNumber, opt => opt.DoNotValidate())
+        //     .ForSourceMember(src => src.SenderAccountNumber, opt => opt.DoNotValidate());
+
+    //     CreateMap<CreateCompleteOrderWithHavaleRequest, CreatePaymentByHavaleRequest>()
+    //         .ForSourceMember(src => src.CustomerId, opt => opt.DoNotValidate())
+    //         .ForSourceMember(src => src.Address, opt => opt.DoNotValidate())
+    //         .ForSourceMember(src => src.BasketId, opt => opt.DoNotValidate())
+    //         .ForSourceMember(src => src.PaymentMethod, opt => opt.DoNotValidate());
+    //
     }
 }

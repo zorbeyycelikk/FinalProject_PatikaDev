@@ -31,6 +31,7 @@ public class BasketItemCommandHandler:
         var x = await unitOfWork.BasketItemRepository.GetAsQueryable()
             .Where(x => x.ProductId == request.Model.ProductId && x.BasketId == request.Model.BasketId)
             .SingleOrDefaultAsync(cancellationToken);
+        
         if (x is null)
         {
             unitOfWork.BasketItemRepository.AddAsync(mapped,cancellationToken);

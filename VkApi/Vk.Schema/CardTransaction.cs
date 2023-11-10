@@ -2,12 +2,11 @@ namespace Vk.Schema;
 
 public class CreateCardTransactionRequest
 {     
-    public string CardId { get; set; } 
     public string receiverAccountNumber  { get; set; } // Alıcının hesap numarasi
     public string CardNumber { get; set; }
     public string Cvv { get; set; } // nnn
     public DateTime ExpiryDate { get; set; } // DDyy
-    public int Amount { get; set; } // İşlemin Tutar
+    public decimal Amount { get; set; } // İşlemin Tutar
 }
 
 public class UpdateCardTransactionRequest
@@ -26,7 +25,7 @@ public class CardTransactionResponse
     public string Cvv { get; set; } // nnn
     public DateTime ExpiryDate { get; set; } // DDyy
     
-    public int Amount { get; set; } // İşlemin Tutarı
+    public decimal Amount { get; set; } // İşlemin Tutarı
     public string Status { get; set; } // Bekleniyor | Basarili | Basarisiz
 }
 

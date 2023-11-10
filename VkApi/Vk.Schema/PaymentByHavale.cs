@@ -1,20 +1,20 @@
 namespace Vk.Schema;
 
-public class CreatePaymentByEftRequest
+public class CreatePaymentByHavaleRequest
 {     
     public string SenderAccountNumber { get; set; }
-    public string IBAN { get; set; }
+    public string AccountNumber { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public decimal Amount { get; set; }
 }
 
-public class PaymentByEftResponse
+public class PaymentByHavaleResponse
 {
     public string refNumber { get; set; } // otomatik oluşacak
-    public string IBAN { get; set; }    // alıcı
+    public string AccountNumber { get; set; } // alıcı
     public string Name { get; set; }    // alıcı
-    public string Description { get; set; } // alıcı
+    public string Description { get; set; } 
     public decimal Amount { get; set; }
     
     public string Status  { get; set; } // islem sonucuna göre olusacak

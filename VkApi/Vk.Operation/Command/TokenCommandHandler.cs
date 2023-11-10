@@ -42,7 +42,7 @@ public class TokenCommandHandler :
             return new ApiResponse<TokenResponse>( "Error" , false);
         }
         
-        if (!entity.IsActive)
+        if (entity.IsActive == false)
         {
             return new ApiResponse<TokenResponse>("Error" , false);
         }

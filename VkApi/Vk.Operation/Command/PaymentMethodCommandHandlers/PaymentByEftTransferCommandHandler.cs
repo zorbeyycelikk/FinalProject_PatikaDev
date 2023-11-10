@@ -28,13 +28,14 @@ public class PaymentByEftTransferCommandHandler:
         var receiverAccount  = await unitOfWork.AccountRepository.GetAsQueryable()
             .Where(x => x.IBAN == request.Model.IBAN && x.IsActive == true && x.Name == request.Model.Name)
             .SingleOrDefaultAsync(cancellationToken);
+        
         if (receiverAccount is null)
         {
             return new ApiResponse<PaymentByEftResponse>("Error", false);
         }
-
-        var senderAccount = await unitOfWork.AccountRepository.GetById(request.Model.SenderAccountId,cancellationToken);
-
+        
+        var senderAccount = await unitOfWork.AccountRepository.GetAsQueryable()
+            .Where(x => x.AccountNumber == request.Model.SenderAccountNumber).SingleOrDefaultAsync(cancellationToken);
         // Ödemek için yeterli miktarda para yoktur.
         if (senderAccount.Balance < request.Model.Amount)
         {
@@ -49,11 +50,13 @@ public class PaymentByEftTransferCommandHandler:
         senderTransaction.Id = senderTransaction.MakeId(senderTransaction.Id);
         senderTransaction.AccountId = senderAccount.Id;
         senderTransaction.refNumber = refNumber;
+        senderTransaction.AccountNumber = receiverAccount.AccountNumber;
         senderTransaction.IBAN = receiverAccount.IBAN;
         senderTransaction.Name = receiverAccount.Name;
         senderTransaction.Description = request.Model.Description;
         senderTransaction.Amount = request.Model.Amount;
         senderTransaction.Who = "Sender";
+        senderTransaction.PaymentMethod = "Havale";
         senderTransaction.Status = status;
         senderTransaction.TransactionDate = DateTime.UtcNow;
         
@@ -61,11 +64,13 @@ public class PaymentByEftTransferCommandHandler:
         receiverTransaction.Id = receiverTransaction.MakeId(receiverTransaction.Id);
         receiverTransaction.AccountId = receiverAccount.Id;
         receiverTransaction.refNumber = refNumber;
+        receiverTransaction.AccountNumber = senderAccount.AccountNumber;
         receiverTransaction.IBAN = senderAccount.IBAN;
         receiverTransaction.Name = senderAccount.Name;
         receiverTransaction.Description = request.Model.Description;
         receiverTransaction.Amount = request.Model.Amount;
         receiverTransaction.Who = "Receiver";
+        receiverTransaction.PaymentMethod = "EFT";
         receiverTransaction.Status = status;
         receiverTransaction.TransactionDate = DateTime.UtcNow;
 
@@ -78,6 +83,6 @@ public class PaymentByEftTransferCommandHandler:
         response.refNumber = refNumber;
         response.Status = status;
         
-        return new ApiResponse<PaymentByEftResponse>(response); // değişecek
+        return new ApiResponse<PaymentByEftResponse>(response);
     }
 }

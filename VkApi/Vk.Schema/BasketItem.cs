@@ -11,8 +11,6 @@ public class CreateBasketItemRequest
 public class BasketItemResponse
 {
     public string BasketId { get; set; }
-    // public string ProductId { get; set; }
-    // public string ProductName { get; set; }
     public int    Quantity { get; set; }
     public ProductResponse Product { get; set; }
 

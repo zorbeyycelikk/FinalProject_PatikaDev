@@ -18,7 +18,7 @@ public class CardTransaction : BaseModel
     public string Cvv { get; set; } // nnn
     public DateTime ExpiryDate { get; set; } // DDyy
     
-    public int Amount { get; set; } // İşlemin Tutarı
+    public decimal Amount { get; set; } // İşlemin Tutarı
     public string Status { get; set; } // Bekleniyor | Basarili | Basarisiz
 }
 
@@ -37,7 +37,7 @@ public class CardTransactionConfigruration : IEntityTypeConfiguration<CardTransa
         builder.Property(x => x.Cvv).IsRequired().HasMaxLength(3);
         builder.Property(x => x.ExpiryDate).IsRequired();
         
-        builder.Property(x => x.Amount).IsRequired();
+        builder.Property(x => x.Amount).IsRequired().HasPrecision(18, 2);
         builder.Property(x => x.Status).IsRequired();
         
         builder.HasIndex(x => x.CardId);

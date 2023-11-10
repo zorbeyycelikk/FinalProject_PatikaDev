@@ -7,7 +7,8 @@ public class CreateCustomerRequest
     public string Phone { get; set; }
     public string Role  { get; set; } // admin or bayi  | default value bayi
     public string Password { get; set; }
-    public float  Profit { get; set; }
+    public decimal  Profit { get; set; }
+    public decimal openAccountLimit { get; set; }
 }
 
 public class UpdateCustomerRequest
@@ -16,7 +17,8 @@ public class UpdateCustomerRequest
     public string Email { get; set; }
     public string Phone { get; set; }
     public string Password { get; set; }
-    public float  Profit { get; set; }
+    public decimal  Profit { get; set; }
+    public decimal openAccountLimit { get; set; }
 }
 
 public class CustomerResponse
@@ -26,7 +28,8 @@ public class CustomerResponse
     public string Email { get; set; }
     public string Phone { get; set; }
     public string Role  { get; set; } // admin or bayi  | default value bayi
-    public float  Profit { get; set; }
+    public decimal  Profit { get; set; }
+    public decimal openAccountLimit { get; set; }
     public bool IsActive { get; set; }
 
 
