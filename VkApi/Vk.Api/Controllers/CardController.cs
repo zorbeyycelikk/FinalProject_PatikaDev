@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vk.Operation.Cqrs;
 using Vk.Schema;
@@ -17,6 +18,7 @@ public class CardController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> Get()
     {
         var operation = new GetAllCardQuery();
@@ -25,6 +27,7 @@ public class CardController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> Get(string id)
     {
         var operation = new GetCardById(id);
@@ -33,6 +36,7 @@ public class CardController : ControllerBase
     }
     
     [HttpGet("ByAccount/{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> GetByAccount(string id)
     {
         var operation = new GetCardByAccountNumber(id);
@@ -41,6 +45,7 @@ public class CardController : ControllerBase
     }
     
     [HttpGet("ByParameter")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> ByParameter(
         [FromQuery] DateTime? ExpiryDate
     )
@@ -51,6 +56,7 @@ public class CardController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> Create([FromBody] CreateCardRequest request)
     {
         var operation = new CreateCardCommand(request);
@@ -59,6 +65,7 @@ public class CardController : ControllerBase
     }
     
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async  Task<IActionResult> Put(string id, [FromBody] UpdateCardRequest request)
     {
         var operation = new UpdateCardCommand(request,id);
@@ -67,6 +74,7 @@ public class CardController : ControllerBase
     }
     
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteCardCommand(id);

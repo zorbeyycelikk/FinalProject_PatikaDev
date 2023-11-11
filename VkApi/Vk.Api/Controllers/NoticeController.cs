@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vk.Operation.Cqrs;
 using Vk.Schema;
@@ -17,6 +18,7 @@ public class NoticeController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Get()
     {
         var operation = new GetAllNoticeQuery();
@@ -25,6 +27,7 @@ public class NoticeController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> Get(string id)
     {
         var operation = new GetNoticeById(id);
@@ -33,6 +36,7 @@ public class NoticeController : ControllerBase
     }
     
     [HttpGet("ByParameter")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> ByParameter(
         [FromQuery] string? Id,
         [FromQuery] string? ReceiverId,
@@ -46,6 +50,7 @@ public class NoticeController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] CreateNoticeRequest request)
     {
         var operation = new CreateNoticeCommand(request);
@@ -54,6 +59,7 @@ public class NoticeController : ControllerBase
     }
     
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async  Task<IActionResult> Put(string id, [FromBody] UpdateNoticeRequest request)
     {
         var operation = new UpdateNoticeCommand(request,id);
@@ -62,6 +68,7 @@ public class NoticeController : ControllerBase
     }
     
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteNoticeCommand(id);

@@ -36,7 +36,8 @@ public class SessionCustomerController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
-    [HttpGet("GetCustomerAllCardInfo")]    
+    [HttpGet("GetCustomerAllCardInfo")]   
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> AllCardInfo()
     {
         var number = (User.Identity as ClaimsIdentity).FindFirst("Id").Value;
@@ -46,6 +47,7 @@ public class SessionCustomerController : ControllerBase
     }
     
     [HttpGet("GetCustomerAllBasketInfo")] 
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> BasketInfo()
     {
         var number = (User.Identity as ClaimsIdentity).FindFirst("Id").Value;
@@ -55,6 +57,7 @@ public class SessionCustomerController : ControllerBase
     }
     
     [HttpGet("GetCustomerActiveBasketInfo")] 
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> ActiveBasketInfo()
     {
         var number = (User.Identity as ClaimsIdentity).FindFirst("Id").Value;
@@ -63,6 +66,7 @@ public class SessionCustomerController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     [HttpGet("GetCustomerAllBasketItemInfo")] 
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> BasketItemInfo()
     {
         var number = (User.Identity as ClaimsIdentity).FindFirst("Id").Value;
@@ -72,6 +76,7 @@ public class SessionCustomerController : ControllerBase
     }
     
     [HttpGet("GetCustomerBasketItemInfoForActiveBasketByCustomerNumber")] 
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> BasketItemInfoForActiveBasket()
     {
         var number = (User.Identity as ClaimsIdentity).FindFirst("Id").Value;
@@ -81,6 +86,7 @@ public class SessionCustomerController : ControllerBase
     }
     
     [HttpGet("GetCustomerAllOrderInfo")] 
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> OrderInfo()
     {
         var number = (User.Identity as ClaimsIdentity).FindFirst("Id").Value;
@@ -89,6 +95,7 @@ public class SessionCustomerController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     [HttpGet("GetCustomerProductListInfo")] 
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> ProductListInfo()
     {
         var number = (User.Identity as ClaimsIdentity).FindFirst("Id").Value;

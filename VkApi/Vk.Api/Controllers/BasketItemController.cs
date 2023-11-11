@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vk.Operation.Cqrs;
 using Vk.Schema;
@@ -17,6 +18,7 @@ public class BasketItemController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> Get()
     {
         var operation = new GetAllBasketItemQuery();
@@ -25,6 +27,7 @@ public class BasketItemController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> Get(string id)
     {
         var operation = new GetBasketItemById(id);
@@ -33,6 +36,7 @@ public class BasketItemController : ControllerBase
     }
     
     [HttpGet("ByParameter")]
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> ByParameter(
         [FromQuery] int? minQuantity,
         [FromQuery] int? maxQuantity
@@ -44,6 +48,7 @@ public class BasketItemController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> Create([FromBody] CreateBasketItemRequest request)
     {
         var operation = new CreateBasketItemCommand(request);
@@ -52,6 +57,7 @@ public class BasketItemController : ControllerBase
     }
     
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteBasketItemCommand(id);
@@ -59,6 +65,7 @@ public class BasketItemController : ControllerBase
         return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     [HttpDelete("HardDelete/{id}")]
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> HardDeleteById(string id)
     {
         var operation = new HardDeleteBasketItemCommand(id);
@@ -67,6 +74,7 @@ public class BasketItemController : ControllerBase
     }
     
     [HttpDelete("HardDeleteByProductId/{id}")]
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> DeleteByProductId(string id)
     {
         var operation = new HardDeleteBasketItemByProductNumberCommand(id);

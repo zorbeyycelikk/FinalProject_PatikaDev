@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vk.Operation.Cqrs;
 using Vk.Schema;
@@ -17,6 +18,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> Get()
     {
         var operation = new GetAllAccountQuery();
@@ -25,6 +27,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> Get(string id)
     {
         var operation = new GetAccountById(id);
@@ -33,6 +36,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpGet("ByParameter")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> ByParameter(
         [FromQuery] string? Name,
         [FromQuery] string? AccountNumber,
@@ -47,6 +51,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> Create([FromBody] CreateAccountRequest request)
     {
         var operation = new CreateAccountCommand(request);
@@ -55,6 +60,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async  Task<IActionResult> Put(string id, [FromBody] UpdateAccountRequest request)
     {
         var operation = new UpdateAccountCommand(request,id);
@@ -63,6 +69,7 @@ public class AccountController : ControllerBase
     }
     
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteAccountCommand(id);

@@ -18,7 +18,7 @@ public class CustomerController : ControllerBase
     }
     
     [HttpGet]
-    // [Authorize(Roles = "admin")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Get()
     {
         var operation = new GetAllCustomerQuery();
@@ -27,6 +27,8 @@ public class CustomerController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
+
     public async Task<IActionResult> Get(string id)
     {
         var operation = new GetCustomerById(id);
@@ -35,6 +37,7 @@ public class CustomerController : ControllerBase
     }
     
     [HttpGet("ByParameter")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ByParameter(
         [FromQuery] string? Id,
         [FromQuery] string? Name,
@@ -54,6 +57,7 @@ public class CustomerController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] CreateCustomerRequest request)
     {
         var operation = new CreateCustomerCommand(request);
@@ -62,6 +66,7 @@ public class CustomerController : ControllerBase
     }
     
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async  Task<IActionResult> Put(string id, [FromBody] UpdateCustomerRequest request)
     {
         var operation = new UpdateCustomerCommand(request,id);
@@ -70,6 +75,7 @@ public class CustomerController : ControllerBase
     }
     
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteCustomerCommand(id);

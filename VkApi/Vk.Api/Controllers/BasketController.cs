@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vk.Operation.Cqrs;
 using Vk.Schema;
@@ -17,6 +18,7 @@ public class BasketController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> Get()
     {
         var operation = new GetAllBasketQuery();
@@ -25,6 +27,7 @@ public class BasketController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> Get(string id)
     {
         var operation = new GetBasketById(id);
@@ -33,6 +36,7 @@ public class BasketController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> Create([FromBody] CreateBasketRequest request)
     {
         var operation = new CreateBasketCommand(request);
@@ -41,6 +45,7 @@ public class BasketController : ControllerBase
     }
     
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteBasketCommand(id);

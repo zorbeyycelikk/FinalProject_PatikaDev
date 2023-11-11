@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vk.Base.Response;
 using Vk.Operation.Cqrs;
@@ -18,6 +19,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Get()
     {
         var operation = new GetAllOrderQuery();
@@ -26,6 +28,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> Get(string id)
     {
         var operation = new GetOrderById(id);
@@ -34,6 +37,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpGet("ByParameter")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> ByParameter(
         [FromQuery] string? Id,
         [FromQuery] string? CustomerId,
@@ -54,6 +58,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "Bayi")]
     public async Task<IActionResult> Create([FromBody] CreateOrderRequest request)
     {
         var operation = new CreateOrderCommand(request);
@@ -62,6 +67,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async  Task<IActionResult> Put(string id, [FromBody] UpdateOrderRequest request)
     {
         var operation = new UpdateOrderCommand(request,id);
@@ -70,6 +76,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpPut("CancelledWithOrderNumber/{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async  Task<IActionResult> CancelledWithOrderNumber(string id)
     {
         var operation = new CancelledWithOrderNumberCommand(id);
@@ -78,6 +85,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpPut("ConfirmWithOrderNumber/{id}")]
+    [Authorize(Roles = "Admin")]
     public async  Task<IActionResult> ConfirmWithOrderNumber(string id)
     {
         var operation = new ConfirmWithOrderNumberCommand(id);
@@ -86,6 +94,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpPut("ConfirmWithId/{id}")]
+    [Authorize(Roles = "Admin")]
     public async  Task<IActionResult> ConfirmWithId(string id)
     {
         var operation = new ConfirmWithIdCommand(id);
@@ -94,6 +103,7 @@ public class OrderController : ControllerBase
     }
     
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteOrderCommand(id);

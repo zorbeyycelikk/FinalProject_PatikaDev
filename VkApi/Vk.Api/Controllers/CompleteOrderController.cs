@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vk.Operation.Command.CompleteOrderWithPaymentMethodsCommandHandlers;
 using Vk.Operation.Cqrs.CompleteOrderWithPaymentMethodsCqrs;
@@ -20,6 +21,7 @@ public class CompleteOrderWithPaymentMethods : ControllerBase
             
     // Havale yöntemi ile sipariş başarılı , başarısız şekilde oluşturulur
     [HttpPost("CompleteOrderWithHavale")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> CompleteOrderWithHavale([FromBody] CreateCompleteOrderWithHavaleRequest request)
     {
         var operation = new CompleteOrderWithHavaleTransfer(request);
@@ -29,6 +31,7 @@ public class CompleteOrderWithPaymentMethods : ControllerBase
     
     // Havale yöntemi ile sipariş başarılı , başarısız şekilde oluşturulur
     [HttpPost("CompleteOrderWithEft")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> CompleteOrderWithEft([FromBody] CreateCompleteOrderWithEftRequest request)
     {
         var operation = new CompleteOrderWithEftTransfer(request);
@@ -38,6 +41,7 @@ public class CompleteOrderWithPaymentMethods : ControllerBase
     
     // Card yöntemi ile sipariş başarılı , başarısız şekilde oluşturulur
     [HttpPost("CompleteOrderWithCard")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> CompleteOrderWithEft([FromBody] CreateCompleteOrderWithCardRequest request)
     {
         var operation = new CompleteOrderWithCardTransfer(request);
@@ -47,6 +51,7 @@ public class CompleteOrderWithPaymentMethods : ControllerBase
     
     // Card yöntemi ile sipariş başarılı , başarısız şekilde oluşturulur
     [HttpPost("CompleteOrderWithOpenAccount")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> CompleteOrderWithOpenAccount([FromBody] CreateCompleteOrderWithOpenAccountRequest request)
     {
         var operation = new CompleteOrderWithOpenAccountTransfer(request);

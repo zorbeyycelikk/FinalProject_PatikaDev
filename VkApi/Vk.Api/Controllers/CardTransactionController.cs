@@ -18,6 +18,7 @@ public class CardTransactionController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> Get()
     {
         var operation = new GetAllCardTransactionQuery();
@@ -26,6 +27,7 @@ public class CardTransactionController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> Get(string id)
     {
         var operation = new GetCardTransactionById(id);
@@ -34,6 +36,7 @@ public class CardTransactionController : ControllerBase
     }
     
     [HttpGet("ByParameter")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> ByParameter(
         [FromQuery] string? transactionRefNumber,
         [FromQuery] string? CardId,
@@ -51,6 +54,7 @@ public class CardTransactionController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> Create([FromBody] CreateCardTransactionRequest request)
     {
         var operation = new CreateCardTransactionCommand(request);
@@ -59,6 +63,7 @@ public class CardTransactionController : ControllerBase
     }
     
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async  Task<IActionResult> Put(string id, [FromBody] UpdateCardTransactionRequest request)
     {
         var operation = new UpdateCardTransactionCommand(request,id);
@@ -67,6 +72,7 @@ public class CardTransactionController : ControllerBase
     }
     
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteCardTransactionCommand(id);

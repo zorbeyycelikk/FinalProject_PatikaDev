@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vk.Base.Response;
 using Vk.Operation.Cqrs;
@@ -18,6 +19,7 @@ public class ProductController : ControllerBase
     }
     
     [HttpGet]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> Get()
     {
         var operation = new GetAllProductQuery();
@@ -26,6 +28,7 @@ public class ProductController : ControllerBase
     }
     
     [HttpGet("{id}")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> Get(string id)
     {
         var operation = new GetProductById(id);
@@ -33,7 +36,8 @@ public class ProductController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
-    [HttpGet("GetAllUniqueProductCategoryNamesQuery")]    
+    [HttpGet("GetAllUniqueProductCategoryNamesQuery")] 
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> GetCategories()
     {
         var operation = new GetAllUniqueProductCategoryNamesQuery();
@@ -42,6 +46,7 @@ public class ProductController : ControllerBase
     }
     
     [HttpGet("ByParameter")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> ByParameter(
         [FromQuery] string? Id,
         [FromQuery] string? Name,
@@ -59,6 +64,7 @@ public class ProductController : ControllerBase
     }
     
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create([FromBody] CreateProductRequest request)
     {
         var operation = new CreateProductCommand(request);
@@ -67,6 +73,7 @@ public class ProductController : ControllerBase
     }
     
     [HttpPut("{id}")]
+    [Authorize(Roles = "Admin")]
     public async  Task<IActionResult> Put(string id, [FromBody] UpdateProductRequest request)
     {
         var operation = new UpdateProductCommand(request,id);
@@ -75,6 +82,7 @@ public class ProductController : ControllerBase
     }
     
     [HttpPut("ProductStockAfterCreateOrder")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async  Task<IActionResult> UpdateProductStockAfterCreateOrder(string basketId)
     {
         var operation = new UpdateProductStockAfterCreateOrderCommand(basketId);
@@ -83,6 +91,7 @@ public class ProductController : ControllerBase
     }
     
     [HttpPut("ProductStockAfterCancelledOrder")]
+    [Authorize(Roles = "Admin,Bayi")]
     public async  Task<IActionResult> UpdateProductStockAfterCancelledOrder(string basketId)
     {
         var operation = new UpdateProductStockAfterCancelledOrderCommand(basketId);
@@ -91,6 +100,7 @@ public class ProductController : ControllerBase
     }
     
     [HttpDelete("{id}")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteById(string id)
     {
         var operation = new DeleteProductCommand(id);

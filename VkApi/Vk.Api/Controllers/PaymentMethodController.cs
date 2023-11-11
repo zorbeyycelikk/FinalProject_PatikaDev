@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Vk.Operation.Cqrs;
 using Vk.Schema;
@@ -16,7 +17,8 @@ public class PaymentMethodController : ControllerBase
         this.mediator = mediator;
     }
 
-    [HttpPost("EftPayment")]    
+    [HttpPost("EftPayment")]  
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> CreateEftTransfer([FromBody] CreatePaymentByEftRequest request)
     {
         var operation = new CreatePaymentByEftTransferCommand(request);
@@ -24,7 +26,8 @@ public class PaymentMethodController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
-    [HttpPost("HavalePayment")]    
+    [HttpPost("HavalePayment")]  
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> CreateHavaleTransfer([FromBody] CreatePaymentByHavaleRequest request)
     {
         var operation = new CreatePaymentByHavaleTransferCommand(request);
@@ -32,7 +35,8 @@ public class PaymentMethodController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
-    [HttpPost("CardPayment")]    
+    [HttpPost("CardPayment")] 
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> CreateCardTransfer([FromBody] CreatePaymentByCardRequest request)
     {
         var operation = new CreatePaymentCardTransferCommand(request);
@@ -40,7 +44,8 @@ public class PaymentMethodController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
-    [HttpPost("OpenAccountPayment")]    
+    [HttpPost("OpenAccountPayment")] 
+    [Authorize(Roles = "Admin,Bayi")]
     public async Task<IActionResult> CreateOpenAccountTransfer([FromBody] CreatePaymentByOpenAccountRequest request)
     {
         var operation = new CreatePaymentOpenAccountTransferCommand(request);
