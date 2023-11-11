@@ -77,3 +77,28 @@ If the payment is realized, the order status is "Successful". otherwise it is pr
 - Relationships can be seen from the picture below.
 
 <img src="https://github.com/zorbeyycelikk/FinalProject_PatikaDev/blob/main/Img/databaseSchema.png" />
+
+
+## Logging
+- SeriLog has been used for logging and saving logs in an external file.
+<img src="https://github.com/zorbeyycelikk/FinalProject_PatikaDev/blob/main/Img/logger.png"/>
+
+## Frontend
+- Since the user will login based on role, the number of components in the header will change according to the routing.
+- 'Admin' user can see Product, Customer, Settings, Order, Messages and Live Support components. These components will have different views within themselves.
+- 'Bayi' user can see Product, Basket, Settings, Order, Messages and Live Support components. .
+
+-  *Login*                                                             
+
+<img src="https://github.com/zorbeyycelikk/FinalProject_PatikaDev/blob/main/Img/loginPage.png"/>      
+     
+|           Admin Product Page               | Bayi Product Page                                                   
+|-------------------------------|-------------------------------
+|<img src="https://github.com/zorbeyycelikk/FinalProject_PatikaDev/blob/main/Img/adminProduct.png"/>                         |<img src="https://github.com/zorbeyycelikk/FinalProject_PatikaDev/blob/main/Img/bayiProductScreen.png"/>         
+---
+
+|           Admin Customer Screen            |   Bayi Basket Screen                                                   
+|-------------------------------|-------------------------------   
+|<img src="https://github.com/zorbeyycelikk/FinalProject_PatikaDev/blob/main/Img/adminCustomerScreen.png"/>                       |<img src="https://github.com/zorbeyycelikk/FinalProject_PatikaDev/blob/main/Img/bayiBasketScreen.png"/>
+
+---
