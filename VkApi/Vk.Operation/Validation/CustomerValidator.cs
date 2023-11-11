@@ -15,7 +15,7 @@ public class CreateCustomerValidator: AbstractValidator<CreateCustomerRequest>
         RuleFor(x => x.Profit)
             .NotEmpty().WithMessage("Profit cannot be empty.")
             .GreaterThanOrEqualTo(0).WithMessage("Profit must be greater than or equal to 0.")
-            .LessThan(100).WithMessage("Profit must be less than 100.");
+            .LessThan(101).WithMessage("Profit must be less than or equal to 100.");
     }
 }
 

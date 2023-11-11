@@ -13,3 +13,5 @@ public record HardDeleteBasketItemByProductNumberCommand(string Id) : IRequest<A
 
 public record GetAllBasketItemQuery() : IRequest<ApiResponse<List<BasketItemResponse>>>;
 public record GetBasketItemById(string Id) : IRequest<ApiResponse<BasketItemResponse>>;
+public record GetBasketItemByParametersQuery(int? minQuantity,int? maxQuantity  ): IRequest<ApiResponse<List<BasketItemResponse>>>;
+

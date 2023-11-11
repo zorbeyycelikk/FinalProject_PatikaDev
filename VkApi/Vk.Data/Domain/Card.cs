@@ -28,7 +28,7 @@ public class CardConfigruration : IEntityTypeConfiguration<Card>
         builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
 
         builder.Property(x => x.AccountId).IsRequired(true);
-        builder.Property(x => x.CardNumber).IsRequired();
+        builder.Property(x => x.CardNumber).IsRequired().HasMaxLength(16);
         builder.Property(x => x.Cvv).IsRequired().HasMaxLength(3);
         builder.Property(x => x.ExpiryDate).IsRequired();
 

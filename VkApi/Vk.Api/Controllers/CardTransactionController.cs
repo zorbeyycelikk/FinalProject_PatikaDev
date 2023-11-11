@@ -33,6 +33,23 @@ public class CardTransactionController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
+    [HttpGet("ByParameter")]
+    public async Task<IActionResult> ByParameter(
+        [FromQuery] string? transactionRefNumber,
+        [FromQuery] string? CardId,
+        [FromQuery] string? receiverAccountNumber,
+        [FromQuery] string? CardNumber,
+        [FromQuery] string? Status,
+        [FromQuery] decimal? minAmount,
+        [FromQuery] decimal? maxAmount
+    )
+    {
+        var operation = new GetCardTransactionByParametersQuery(transactionRefNumber, CardId,receiverAccountNumber, 
+            CardNumber, Status , minAmount , maxAmount);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateCardTransactionRequest request)
     {

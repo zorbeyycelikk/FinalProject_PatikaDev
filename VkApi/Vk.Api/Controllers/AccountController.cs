@@ -32,6 +32,20 @@ public class AccountController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
+    [HttpGet("ByParameter")]
+    public async Task<IActionResult> ByParameter(
+        [FromQuery] string? Name,
+        [FromQuery] string? AccountNumber,
+        [FromQuery] string? IBAN,
+        [FromQuery] int? minBalance,
+        [FromQuery] int? maxBalance
+    )
+    {
+        var operation = new GetAccountByParametersQuery(Name, AccountNumber,IBAN, minBalance, maxBalance);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateAccountRequest request)
     {

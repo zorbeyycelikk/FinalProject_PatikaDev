@@ -34,6 +34,25 @@ public class CustomerController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
+    [HttpGet("ByParameter")]
+    public async Task<IActionResult> ByParameter(
+        [FromQuery] string? Id,
+        [FromQuery] string? Name,
+        [FromQuery] string? Email,
+        [FromQuery] string? Phone,
+        [FromQuery] string? Role ,
+        [FromQuery] decimal? minProfit,
+        [FromQuery] decimal? maxProfit,
+        [FromQuery] decimal? minopenAccountLimit,
+        [FromQuery] decimal? maxopenAccountLimit
+    )
+    {
+        var operation = new GetCustomerByParametersQuery(Id, Name, Email,
+            Phone, Role, minProfit, maxProfit,minopenAccountLimit,maxopenAccountLimit);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateCustomerRequest request)
     {

@@ -32,6 +32,17 @@ public class BasketItemController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
+    [HttpGet("ByParameter")]
+    public async Task<IActionResult> ByParameter(
+        [FromQuery] int? minQuantity,
+        [FromQuery] int? maxQuantity
+    )
+    {
+        var operation = new GetBasketItemByParametersQuery(minQuantity, maxQuantity);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateBasketItemRequest request)
     {

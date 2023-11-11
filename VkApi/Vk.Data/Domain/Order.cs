@@ -31,7 +31,7 @@ class OrderConfigruration : IEntityTypeConfiguration<Order>
         builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(true);
         
         builder.Property(x => x.OrderNumber).IsRequired().HasMaxLength(50);
-        builder.Property(x => x.Description).IsRequired().HasMaxLength(50);
+        builder.Property(x => x.Description).HasMaxLength(50);
         builder.Property(x => x.Address).IsRequired().HasMaxLength(50);
         builder.Property(x => x.Amount).IsRequired().HasPrecision(18, 2);
 

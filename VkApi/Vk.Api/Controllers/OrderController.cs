@@ -33,20 +33,32 @@ public class OrderController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
+    [HttpGet("ByParameter")]
+    public async Task<IActionResult> ByParameter(
+        [FromQuery] string? Id,
+        [FromQuery] string? CustomerId,
+        [FromQuery] string? OrderNumber,
+        [FromQuery] string? Description,
+        [FromQuery] string? Address ,
+        [FromQuery] string? PaymentMethod,
+        [FromQuery] string? PaymentRefCode,
+        [FromQuery] decimal? minAmount,
+        [FromQuery] decimal? maxAmount,
+        [FromQuery] string? Status
+    )
+    {
+        var operation = new GetOrderByParametersQuery(Id, CustomerId, OrderNumber,
+            Description, Address, PaymentMethod, PaymentRefCode,minAmount,maxAmount,Status);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateOrderRequest request)
     {
         var operation = new CreateOrderCommand(request);
         var result = await mediator.Send(operation);
         return result.Success ? Ok(result.Message) : result.Message == "Error" ? Conflict() : BadRequest();
-    }
-    
-    [HttpPost("CancelledWithOrderNumber/{id}")]
-    public async  Task<IActionResult> CancelledWithOrderNumber(string id)
-    {
-        var operation = new CancelledWithOrderNumberCommand(id);
-        var result = await mediator.Send(operation);
-        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
     [HttpPut("{id}")]
@@ -57,10 +69,10 @@ public class OrderController : ControllerBase
         return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteById(string id)
+    [HttpPut("CancelledWithOrderNumber/{id}")]
+    public async  Task<IActionResult> CancelledWithOrderNumber(string id)
     {
-        var operation = new DeleteOrderCommand(id);
+        var operation = new CancelledWithOrderNumberCommand(id);
         var result = await mediator.Send(operation);
         return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
     }
@@ -77,6 +89,14 @@ public class OrderController : ControllerBase
     public async  Task<IActionResult> ConfirmWithId(string id)
     {
         var operation = new ConfirmWithIdCommand(id);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteById(string id)
+    {
+        var operation = new DeleteOrderCommand(id);
         var result = await mediator.Send(operation);
         return result.Success ? Ok(result.Message) : result.Message == "Error" ? NotFound() : BadRequest();
     }

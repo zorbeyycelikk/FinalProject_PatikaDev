@@ -59,9 +59,3 @@ public class CreateCompleteOrderWithOpenAccountRequest
     public decimal Amount { get; set; }
 
 }
-
-
-public class CompleteOrderResponse2
-{
-
-}

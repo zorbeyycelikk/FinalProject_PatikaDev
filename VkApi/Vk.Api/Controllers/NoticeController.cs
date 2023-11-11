@@ -32,6 +32,19 @@ public class NoticeController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
+    [HttpGet("ByParameter")]
+    public async Task<IActionResult> ByParameter(
+        [FromQuery] string? Id,
+        [FromQuery] string? ReceiverId,
+        [FromQuery] string? Content,
+        [FromQuery] bool? ReadStatus
+    )
+    {
+        var operation = new GetNoticeByParametersQuery(Id, ReceiverId, Content, ReadStatus);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateNoticeRequest request)
     {

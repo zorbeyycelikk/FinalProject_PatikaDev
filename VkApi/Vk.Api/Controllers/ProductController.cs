@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Vk.Base.Response;
 using Vk.Operation.Cqrs;
 using Vk.Schema;
 
@@ -24,6 +25,14 @@ public class ProductController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
+    [HttpGet("{id}")]
+    public async Task<IActionResult> Get(string id)
+    {
+        var operation = new GetProductById(id);
+        var result = await mediator.Send(operation);
+        return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
+    }
+    
     [HttpGet("GetAllUniqueProductCategoryNamesQuery")]    
     public async Task<IActionResult> GetCategories()
     {
@@ -32,10 +41,19 @@ public class ProductController : ControllerBase
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }
     
-    [HttpGet("{id}")]
-    public async Task<IActionResult> Get(string id)
+    [HttpGet("ByParameter")]
+    public async Task<IActionResult> ByParameter(
+        [FromQuery] string? Id,
+        [FromQuery] string? Name,
+        [FromQuery] string? Category,
+        [FromQuery] int? minStock,
+        [FromQuery] int? maxStock,
+        [FromQuery] int? minPrice,
+        [FromQuery] int? maxPrice
+    )
     {
-        var operation = new GetProductById(id);
+        var operation = new GetProductByParametersQuery(Id, Name, Category,
+            minStock, maxStock, minPrice, maxPrice);
         var result = await mediator.Send(operation);
         return result.Success ? Ok(result.Response) : result.Message == "Error" ? NotFound() : BadRequest();
     }

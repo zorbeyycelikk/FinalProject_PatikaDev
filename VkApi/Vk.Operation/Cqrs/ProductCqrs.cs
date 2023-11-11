@@ -13,4 +13,11 @@ public record UpdateProductStockAfterCancelledOrderCommand(string basketId) : IR
 
 public record GetAllProductQuery() : IRequest<ApiResponse<List<ProductResponse>>>;
 public record GetProductById(string Id) : IRequest<ApiResponse<ProductResponse>>;
+public record GetProductByParametersQuery(
+    string? Id, string? Name, string? Category, int? minStock,int? maxStock,
+    decimal? minPrice, decimal? maxPrice) :
+    IRequest<ApiResponse<List<ProductResponse>>>;
+
 public record GetAllUniqueProductCategoryNamesQuery() : IRequest<ApiResponse<List<string>>>;
+
+

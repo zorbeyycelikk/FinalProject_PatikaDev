@@ -10,3 +10,8 @@ public record DeleteCardTransactionCommand(string Id) : IRequest<ApiResponse>;
 
 public record GetAllCardTransactionQuery() : IRequest<ApiResponse<List<CardTransactionResponse>>>;
 public record GetCardTransactionById(string Id) : IRequest<ApiResponse<CardTransactionResponse>>;
+
+public record GetCardTransactionByParametersQuery(
+    string? transactionRefNumber, string? CardId, string? receiverAccountNumber,
+    string? CardNumber, string? Status , decimal? minAmount, decimal? maxAmount) :
+    IRequest<ApiResponse<List<CardTransactionResponse>>>;

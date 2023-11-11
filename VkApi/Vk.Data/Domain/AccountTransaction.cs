@@ -34,7 +34,7 @@ public class AccountTransactionConfigruration : IEntityTypeConfiguration<Account
         builder.Property(x => x.refNumber).IsRequired();
         builder.Property(x => x.IBAN).IsRequired().HasMaxLength(34);
         builder.Property(x => x.Name).IsRequired().HasPrecision(18,2).HasDefaultValue(0);
-        builder.Property(x => x.TransferDescription).IsRequired();
+        builder.Property(x => x.TransferDescription).IsRequired(false);
         builder.Property(x => x.Amount).IsRequired().HasPrecision(18, 2);
 
 

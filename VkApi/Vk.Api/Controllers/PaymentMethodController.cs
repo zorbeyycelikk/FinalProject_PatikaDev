@@ -7,11 +7,11 @@ namespace VkApi.Controllers;
 [Route("vk/[controller]")]
 [ApiController]
 
-public class MoneyTransferController : ControllerBase
+public class PaymentMethodController : ControllerBase
 {
     private readonly IMediator mediator;
     
-    public MoneyTransferController(IMediator mediator)
+    public PaymentMethodController(IMediator mediator)
     {
         this.mediator = mediator;
     }

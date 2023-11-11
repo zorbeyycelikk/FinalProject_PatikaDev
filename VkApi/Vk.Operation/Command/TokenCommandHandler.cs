@@ -10,7 +10,8 @@
  using Vk.Base.Token;
  using Vk.Data.Context;
 using Vk.Data.Domain;
-using Vk.Schema;
+ using Vk.Data.Uow;
+ using Vk.Schema;
 
 namespace Vk.Operation.Command;
 
@@ -19,10 +20,12 @@ public class TokenCommandHandler :
 
 {
     private readonly VkDbContext dbContext;
+    private readonly IUnitOfWork unitOfWork;
     private readonly JwtConfig jwtConfig;
-    public TokenCommandHandler(VkDbContext dbContext,IOptionsMonitor<JwtConfig> jwtConfig)
+    public TokenCommandHandler(VkDbContext dbContext,IOptionsMonitor<JwtConfig> jwtConfig , IUnitOfWork unitOfWork)
     {
         this.dbContext = dbContext;
+        this.unitOfWork = unitOfWork;
         this.jwtConfig = jwtConfig.CurrentValue;
     }
     

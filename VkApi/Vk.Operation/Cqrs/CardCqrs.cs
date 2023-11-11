@@ -11,3 +11,4 @@ public record DeleteCardCommand(string Id) : IRequest<ApiResponse>;
 public record GetAllCardQuery() : IRequest<ApiResponse<List<CardResponse>>>;
 public record GetCardById(string Id) : IRequest<ApiResponse<CardResponse>>;
 public record GetCardByAccountNumber(string Id) : IRequest<ApiResponse<List<CardResponse>>>;
+public record GetCardByParametersQuery(DateTime? ExpiryDate ): IRequest<ApiResponse<List<CardResponse>>>;

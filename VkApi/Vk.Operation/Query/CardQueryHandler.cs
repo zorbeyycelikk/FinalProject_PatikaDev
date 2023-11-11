@@ -1,3 +1,4 @@
+using LinqKit;
 using Microsoft.EntityFrameworkCore;
 using Vk.Base.Response;
 using Vk.Data.Domain;
@@ -56,5 +57,22 @@ public class CardQueryHandler :
         }
         List<CardResponse> response = mapper.Map<List<CardResponse>>(x);
         return new ApiResponse<List<CardResponse>>(response);
+    }
+    
+    public async Task<ApiResponse<List<CardResponse>>> Handle(GetCardByParametersQuery request, CancellationToken cancellationToken)
+    {
+        var predicate = PredicateBuilder.New<Card>(true);
+        
+        if (request.ExpiryDate !=null)
+            predicate.And(x => x.ExpiryDate == request.ExpiryDate);
+       
+        List<Card> cards = await unitOfWork.CardRepository.GetAsQueryable("Account")
+            .Where(predicate).ToListAsync(cancellationToken);
+        if (!cards.Any())
+        {
+            return new ApiResponse<List<CardResponse>>("Error");
+        }
+        var mapped = mapper.Map<List<CardResponse>>(cards);
+        return new ApiResponse<List<CardResponse>>(mapped);
     }
 }
