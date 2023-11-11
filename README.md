@@ -14,7 +14,6 @@ If the payment is realized, the order status is "Successful". otherwise it is pr
 - If the company does not approve, the money is transferred to the paying user and written to the transactions according to this payment method.
 
 
-
 ### What I have used so far:
 - Asp.Net Core Web API `.Net7.0` framework. and front end "Angular"
 - EntityFramworkCore as an ORM and Tools packages.
@@ -54,14 +53,13 @@ If the payment is realized, the order status is "Successful". otherwise it is pr
 
 ## Folder Structure
 - Clean Architecutre design principles used in the project structure. 
-- ***VkApi*** => will contain the base of the project which includes *Application* Interfaces, Services, and *Domain* entities.
-- ***Vk.Base*** => will be communicating with databases and interface implementations.
-- ***Vk.Api*** => will be responsible the presentation of the project to outer world via APIs.
-- ***Vk.Data*** => will be responsible to listen RabbitMq and save datas into Mongo Db.
-- ***Vk.Operation*** => will be testing the selected methods and flow diagrams of project.
-- ***Vk.Schema*** => will be testing the selected methods and flow diagrams of project.
+- ***VkApi*** => => Base project for Backend. It contains *Vk.Api*, *Vk.Base*, *Vk.Data*, *Vk.Operation*, *Vk.Schema*.- ***Vk.Base*** => will be communicating with databases and interface implementations.
+- ***Vk.Api*** => => will be responsible for presenting the project to the outside world through APIs and *Middlewares* will be here
+- ***Vk.Data*** => It contains the entities needed for the database tables, their creation, the *Generic Repository* needed for the database and the queries in the *UOW* layer.
+- ***Vk.Operation*** => This is the layer where the services and queries required for the project's api's take place.
+- ***Vk.Schema*** => Contains the *requests* and *responses* entities required for the CQRS implemented in the project.
 
-<img src=""/>
+<img src="https://github.com/zorbeyycelikk/FinalProject_PatikaDev/blob/main/Img/folderStructure.png"/>
 
 ## Project Structure
 
@@ -71,8 +69,6 @@ If the payment is realized, the order status is "Successful". otherwise it is pr
 - Services calling the repositories which has only access to database.
 
 
-<img src="" />
- 
 ## Database Design
 
 - To create a list, a category and user must be exist and selected.
@@ -80,4 +76,4 @@ If the payment is realized, the order status is "Successful". otherwise it is pr
 - For doing all above, a user must have credentials and roles to be able to make actions.
 - Relationships can be seen from the picture below.
 
-<img src=""/>
+<img src="https://github.com/zorbeyycelikk/FinalProject_PatikaDev/blob/main/Img/databaseSchema.png" />
