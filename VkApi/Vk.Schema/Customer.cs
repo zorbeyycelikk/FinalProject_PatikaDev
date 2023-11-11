@@ -9,6 +9,7 @@ public class CreateCustomerRequest
     public string Password { get; set; }
     public decimal  Profit { get; set; }
     public decimal openAccountLimit { get; set; }
+    public decimal maxopenAccountLimit { get; set; }
 }
 
 public class UpdateCustomerRequest
@@ -31,6 +32,4 @@ public class CustomerResponse
     public decimal  Profit { get; set; }
     public decimal openAccountLimit { get; set; }
     public bool IsActive { get; set; }
-
-
 }

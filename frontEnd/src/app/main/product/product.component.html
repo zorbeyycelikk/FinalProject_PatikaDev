@@ -1,0 +1,172 @@
+
+
+<div class="row top-group">
+     <!-- Add Product Button -->
+    <button type="button" class="btn btn-outline-dark btn-add" data-toggle="modal" data-target="#addModal" >Add
+        Product</button>
+        <!-- Filter Search Bar -->
+    <input class="form-control" id="exampleInputEmail1" placeholder="Enter product name to filter "
+        [(ngModel)]="filterText" />
+</div>
+
+<!-- Product Card -->
+<div class="row card-layout" *ngIf="product">
+    <div *ngFor="let item of product | productFilter:filterText" class="card border-dark mb-3" style="width: 23rem;">
+        
+        <div class="imgDiv">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"
+            class="card-img-top" alt="...">
+        </div>
+        <div class="card-body text-dark">
+            <h5 class="card-title">Name : {{item.name}}</h5>
+            <p class="card-text">  Id : {{item.id}}</p>
+            <p class="card-text">  Category : {{item.category}}</p>
+            <p class="card-text">  Stock : {{item.stock}}</p>
+            <p class="card-text">Price : {{item.price}}</p>
+
+            <div *ngIf="userRole == 'bayi'">
+                <a href="#" class="btn btn-primary" (click)="addItemToBasket(item.id,$event)">Add To Basket</a>
+
+                <div class="form-group ">
+                    <input type="number" 
+                    name="updateName" 
+                    class="form-control" 
+                    id="inputEmail4" 
+                    [(ngModel)]="quantity"
+                    placeholder="Adet girin"
+                    min="1" max = {{item.stock}} 
+                    (input)="updateQuantity(quantity)">
+                </div>
+            </div>
+
+            <div class="buttonGroup" *ngIf="userRole == 'admin'">
+                <hr>
+                <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" (click)="getProductForModal(item)">Update </a>
+                <hr>
+                <a href="#" class="btn btn-primary" (click)="deleteProduct(item.id)">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Update Modal -->
+<div>
+    <div class="modal fade bd-example-modal-lg" id="updateModal" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Product Modal</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body"  >
+
+                    <form [formGroup]="productUpdateForm" (ngSubmit)="update()" class="form-group">
+            
+                        <div>
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" formControlName="name" class="form-control" placeholder="Product Name" [value] = "selectedProduct.name">
+                            <div class="alert alert-danger" *ngIf="productUpdateForm.get('name')?.hasError('required') && productUpdateForm.get('name')?.dirty ">Product Name Required</div>
+                        </div>
+
+                        <div>
+                            <label for="category">Category</label>
+                            <input type="text" id="category" name="category" formControlName="category" class="form-control" placeholder="Product category" [value] = "selectedProduct.category">
+                            <div class="alert alert-danger" *ngIf="productUpdateForm.get('category')?.hasError('required') && productUpdateForm.get('category')?.dirty ">Product Category Required</div>
+                        </div>
+
+                        <div>
+                            <label for="stock">Stock</label>
+                            <input type="number" id="stock" name="stock" formControlName="stock" class="form-control" placeholder="Product Stock" [value] = "selectedProduct.stock">
+                            <div class="alert alert-danger" *ngIf="productUpdateForm.get('stock')?.hasError('required') && productUpdateForm.get('stock')?.dirty ">Product Stock Required</div>
+                        </div>
+
+                        <div>
+                            <label for="price">Price</label>
+                            <input type="number" id="price" name="price" formControlName="price" class="form-control" placeholder="Product Price" [value] = "selectedProduct.price">
+                            <div class="alert alert-danger" *ngIf="productUpdateForm.get('price')?.hasError('required') && productUpdateForm.get('price')?.dirty ">Product Price Required</div>
+                        </div>
+
+                        <div>
+                            <label for="imgurl">Img Url</label>
+                            <input type="text" id="imgUrl" name="imgUrl" formControlName="imgUrl" class="form-control" placeholder="Product ImgUrl" [value] = "selectedProduct.imgUrl">
+                            <div class="alert alert-danger" *ngIf="productUpdateForm.get('imgUrl')?.hasError('required') && productUpdateForm.get('imgUrl')?.dirty ">Product Img Url Required</div>
+                        </div>
+                    
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="productUpdateForm.invalid" (click)="update()">Update Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Add Modal -->
+<div>
+    <div class="modal fade bd-example-modal-lg" id="addModal" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Product Modal</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body"  >
+
+                    <form [formGroup]="productAddForm" (ngSubmit)="add()" class="form-group">
+            
+                        <div>
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" formControlName="name" class="form-control" placeholder="Product Name">
+                            <div class="alert alert-danger" *ngIf="productAddForm.get('name')?.hasError('required') && productAddForm.get('name')?.dirty ">Product Name Required</div>
+                        </div>
+
+                        <div>
+                            <label for="category">Category</label>
+                            <input type="text" id="category" name="category" formControlName="category" class="form-control" placeholder="Product category">
+                            <div class="alert alert-danger" *ngIf="productAddForm.get('category')?.hasError('required') && productAddForm.get('category')?.dirty ">Product Category Required</div>
+                        </div>
+
+                        <div>
+                            <label for="stock">Stock</label>
+                            <input type="number" id="stock" name="stock" formControlName="stock" class="form-control" placeholder="Product Stock">
+                            <div class="alert alert-danger" *ngIf="productAddForm.get('stock')?.hasError('required') && productAddForm.get('stock')?.dirty ">Product Stock Required</div>
+                        </div>
+
+                        <div>
+                            <label for="price">Price</label>
+                            <input type="number" id="price" name="price" formControlName="price" class="form-control" placeholder="Product Price">
+                            <div class="alert alert-danger" *ngIf="productAddForm.get('price')?.hasError('required') && productAddForm.get('price')?.dirty ">Product Price Required</div>
+                        </div>
+
+                        <div>
+                            <label for="imgUrl">Img Url</label>
+                            <input type="text" id="imgUrl" name="imgUrl" formControlName="imgUrl" class="form-control" placeholder="Product ImgUrl">
+                            <div class="alert alert-danger" *ngIf="productAddForm.get('imgUrl')?.hasError('required') && productAddForm.get('imgUrl')?.dirty ">Product Img Url Required</div>
+                        </div>
+                    
+                    </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" [disabled]="productAddForm.invalid" (click)="add()">Add Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

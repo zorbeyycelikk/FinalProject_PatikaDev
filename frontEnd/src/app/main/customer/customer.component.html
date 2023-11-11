@@ -1,0 +1,166 @@
+<div class="row top-group">
+   <!-- Add Customer Button -->
+   <button type="button" class="btn btn-outline-dark btn-add" data-toggle="modal" data-target="#addModal"  data-dismiss="modal">Add
+    Customer</button>
+     <!-- Filter Search Bar -->
+ <input class="form-control" id="exampleInputEmail1" placeholder="Enter customer email to filter "
+     [(ngModel)]="filterText" />
+</div>
+
+<div class="customerList" *ngIf="customer">
+    <table class="table table-striped" >
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Role</th>
+            <th scope="col">Profit</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let item of customer | customerFilter:filterText ; let i = index ">
+          <tr>
+            <th scope="row">{{i + 1}}</th>
+            <td>{{item.name}}</td>
+            <td>{{item.email}}</td>
+            <td>{{item.phone}}</td>
+            <td>{{item.role}}</td>
+            <td>{{item.profit}}</td>
+            <td>
+                <div class="buttonGroup">
+                    <button type="button" class="btn btn-danger" (click)="deleteCustomer(item.id)">Sil</button>
+                    <button type="button" class="btn btn-warning" (click)="getCustomerForModal(item)" data-toggle="modal" data-target="#updateModal">Güncelle</button>
+                </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+
+
+
+<!-- Add Modal -->
+<div>
+  <div class="modal fade bd-example-modal-lg" id="addModal" tabindex="-1" role="dialog"
+      aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Add Customer Modal</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <form class="addModuleForm">
+
+                      <div class="form-group ">
+                          <label for="inputEmail4">Name</label>
+                          <input type="text" #name class="form-control" id="inputEmail4" placeholder="Customer Name">
+                      </div>
+                      <div class="form-group ">
+                          <label for="inputPassword4">Email</label>
+                          <input type="text" #email class="form-control" id="inputPassword4"
+                              placeholder="Email">
+                      </div>
+                      <div class="form-row">
+                          <div class="form-group col-md-6">
+                              <label for="inputAddress2">Phone</label>
+                              <input type="text" #phone class="form-control" id="inputAddress1"
+                                  placeholder="Phone">
+                          </div>
+                          <div class="form-group col-md-6">
+                              <label for="inputAddress2">Role</label>
+                              <input type="text" #role class="form-control" id="inputAddress2"
+                                  placeholder="Role">
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="inputCity">Password</label>
+                          <input type="text" #password class="form-control" id="inputCity"
+                              placeholder="Password">
+                      </div>
+
+                      <div class="form-group">
+                          <label for="inputCity">Profit</label>
+                          <input type="number" #profit class="form-control" id="inputCity"
+                              placeholder="Profit">
+                      </div>
+                  </form>
+              </div>
+
+              <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button"
+                      (click)="addCustomer(name.value,email.value,phone.value,role.value,password.value,+profit.value)"
+                      class="btn btn-primary" data-dismiss="modal">Add Customer</button>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Update Modal -->
+<div>
+    <div class="modal fade bd-example-modal-lg" id="updateModal" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Customer Modal</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="addModuleForm">
+  
+                        <div class="form-group ">
+                            <label for="inputEmail4">Name</label>
+                            <input type="text" [(ngModel)]="selectedCustomer.name" name="updateName" class="form-control" id="inputEmail4" placeholder="Customer Name">
+                        </div>
+
+                        <div class="form-group ">
+                            <label for="inputPassword4">Email</label>
+                            <input type="text" [(ngModel)]="selectedCustomer.email" name="updateEmail" class="form-control" id="inputPassword4"
+                                placeholder="Email">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="inputAddress2">Phone</label>
+                                <input type="text" [(ngModel)]="selectedCustomer.phone" name="updatePhone" class="form-control" id="inputAddress1"
+                                    placeholder="Phone">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputAddress2">Role</label>
+                                <input type="text" [(ngModel)]="selectedCustomer.role"  class="form-control" name="updateRole" id="inputAddress2"
+                                    placeholder="Role">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputCity">Password</label>
+                            <input type="text" [(ngModel)]="selectedCustomer.password" name="updatePassword" class="form-control" id="inputCity"
+                                placeholder="Password">
+                        </div>
+  
+                        <div class="form-group">
+                            <label for="inputCity">Profit</label>
+                            <input type="number" [(ngModel)]="selectedCustomer.profit" name="updateProfit" class="form-control" id="inputCity"
+                                placeholder="Profit">
+                        </div>
+                    </form>
+                </div>
+  
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button"
+                        (click)="updateCustomer(selectedCustomer)"
+                        class="btn btn-primary" data-dismiss="modal">Update Customer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>

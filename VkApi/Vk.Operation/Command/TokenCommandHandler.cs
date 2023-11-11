@@ -19,12 +19,10 @@ public class TokenCommandHandler :
     IRequestHandler<CreateTokenCommand, ApiResponse<TokenResponse>>
 
 {
-    private readonly VkDbContext dbContext;
     private readonly IUnitOfWork unitOfWork;
     private readonly JwtConfig jwtConfig;
-    public TokenCommandHandler(VkDbContext dbContext,IOptionsMonitor<JwtConfig> jwtConfig , IUnitOfWork unitOfWork)
+    public TokenCommandHandler(IOptionsMonitor<JwtConfig> jwtConfig , IUnitOfWork unitOfWork)
     {
-        this.dbContext = dbContext;
         this.unitOfWork = unitOfWork;
         this.jwtConfig = jwtConfig.CurrentValue;
     }
@@ -32,7 +30,7 @@ public class TokenCommandHandler :
     public async Task<ApiResponse<TokenResponse>> Handle(CreateTokenCommand request,
         CancellationToken cancellationToken)
     {
-        var entity = await dbContext.Set<Customer>()
+        var entity = await unitOfWork.CustomerRepository.GetAsQueryable()
             .FirstOrDefaultAsync(x => x.Email == request.Model.Email, cancellationToken);
         if (entity == null)
         {

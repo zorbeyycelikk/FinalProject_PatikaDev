@@ -22,7 +22,7 @@ public class OrderCommandHandler:
     private readonly IMediator mediator;
     private readonly IMapper mapper;
     private readonly IUnitOfWork unitOfWork;
-    private PaymentByHavaleTransferCommandHandler havale;
+    
     public OrderCommandHandler(
         IMapper mapper,
         IUnitOfWork unitOfWork,
@@ -39,7 +39,7 @@ public class OrderCommandHandler:
         Order mapped = mapper.Map<Order>(request.Model);
         var refNumber = Guid.NewGuid().ToString().Replace("-", "").ToLower();
         mapped.Id = mapped.MakeId(mapped.Id);
-        mapped.Status = "Basarisiz";
+        mapped.Status = "Failed";
         mapped.OrderNumber = refNumber;
         mapped.InsertDate = DateTime.UtcNow;
 
@@ -58,7 +58,7 @@ public class OrderCommandHandler:
             return new ApiResponse("Error");
         }
         
-        mapped.Status = "Basarili";
+        mapped.Status = "Successful";
         unitOfWork.OrderRepository.AddAsync(mapped,cancellationToken);
         unitOfWork.Save();
         return new ApiResponse();
@@ -97,7 +97,7 @@ public class OrderCommandHandler:
     public async Task<ApiResponse> Handle(ConfirmWithOrderNumberCommand request, CancellationToken cancellationToken)
     {
         var x = await unitOfWork.OrderRepository.GetAsQueryable()
-            .Where(x => x.OrderNumber == request.orderNumber && x.Status == "Basarili")
+            .Where(x => x.OrderNumber == request.orderNumber && x.Status == "Successful")
             .SingleOrDefaultAsync(cancellationToken);
         
         if (x is null)
@@ -114,7 +114,7 @@ public class OrderCommandHandler:
     public async Task<ApiResponse> Handle(ConfirmWithIdCommand request, CancellationToken cancellationToken)
     {
         var x = await unitOfWork.OrderRepository.GetAsQueryable()
-            .Where(x => x.Id == request.id && x.Status == "Basarili")
+            .Where(x => x.Id == request.id && x.Status == "Successful")
             .SingleOrDefaultAsync(cancellationToken);
         
         if (x is null)
@@ -131,7 +131,7 @@ public class OrderCommandHandler:
     public async Task<ApiResponse> Handle(CancelledWithOrderNumberCommand request, CancellationToken cancellationToken)
     {
         var x = await unitOfWork.OrderRepository.GetAsQueryable()
-            .Where(x => x.OrderNumber == request.orderNumber && x.Status == "Basarili")
+            .Where(x => x.OrderNumber == request.orderNumber && x.Status == "Successful")
             .SingleOrDefaultAsync(cancellationToken);
        
         if (x is null)
@@ -152,8 +152,17 @@ public class OrderCommandHandler:
 
         if (x.PaymentMethod == "Card")
         {
-            var paymentEft = await cancelledForCard(x.PaymentRefCode, cancellationToken);
-            if (!paymentEft.Success)
+            var paymentCard = await cancelledForCard(x.PaymentRefCode, cancellationToken);
+            if (!paymentCard.Success)
+            {
+                return new ApiResponse("Error");
+            }
+        }
+        
+        if (x.PaymentMethod == "Open Account")
+        {
+            var paymentOpenAccount = await cancelledForCard(x.PaymentRefCode, cancellationToken);
+            if (!paymentOpenAccount.Success)
             {
                 return new ApiResponse("Error");
             }
@@ -219,6 +228,22 @@ public class OrderCommandHandler:
         {
             return new ApiResponse("Error");
         }
+        return new ApiResponse();
+    }
+    
+    private async Task<ApiResponse> cancelledForOpenAccount(string refNumber , CancellationToken cancellationToken)
+    {
+        var senderAccount = await unitOfWork.OpenAccountTransactionRepository.GetAsQueryable("Customer")
+            .Where(x => x.refNumber == refNumber && x.Who == "Sender").SingleOrDefaultAsync(cancellationToken);
+
+        var user = await unitOfWork.CustomerRepository.GetById(senderAccount.CustomerId, cancellationToken);
+
+        if (user is null)
+        {
+            return new ApiResponse("Error");
+
+        }
+        user.openAccountLimit += senderAccount.Amount;
         return new ApiResponse();
     }
 }

@@ -31,7 +31,7 @@ public class CompleteOrderWithOpenAccountTransferCommandHandler:
      public async Task<ApiResponse> Handle(CompleteOrderWithOpenAccountTransfer request, CancellationToken cancellationToken)
      { 
          var checkCustomer = await CheckCustomer(request.Model.CustomerId, cancellationToken);
-
+         
          if (!checkCustomer.Success)
          {
              return new ApiResponse("Error");
@@ -60,8 +60,6 @@ public class CompleteOrderWithOpenAccountTransferCommandHandler:
 
          if (resultPayment.Success)
          {
-             // Basket silinecek
-             
              unitOfWork.BasketRepository.Remove(request.Model.BasketId);
              orderRequest.PaymentRefCode = resultPayment.Response.refNumber;
              await mediator.Send(new CreateOrderCommand(orderRequest));

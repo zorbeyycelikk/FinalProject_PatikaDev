@@ -1,0 +1,35 @@
+.card-layout{
+    margin-left: 3rem;
+    margin-top: 2rem;
+}
+
+.card{
+    margin: 1rem;
+    padding: 1rem 1rem;
+}
+
+.btn{
+    transition: ease-in-out color .15s;
+    width: 8rem;
+}
+
+.top-group{
+    margin-left: 4rem;
+    margin-top: 2rem;
+}
+
+.btn-add{
+    width:18rem;
+}
+
+.btn-add:hover {
+    color: yellow;
+    text-decoration: none;
+}
+.top-group>.form-control{
+    margin-left: 2rem;
+    width:38rem;
+}
+.btnGroup{
+    padding-bottom: 10rem;
+}

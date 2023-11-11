@@ -61,7 +61,6 @@ public class CompleteOrderWithHavaleTransferCommandHandler:
 
          if (resultPayment.Success)
          {
-             // Basket silinecek
              unitOfWork.BasketRepository.Remove(request.Model.BasketId);
              orderRequest.PaymentRefCode = resultPayment.Response.refNumber;
              var x = await mediator.Send(new CreateOrderCommand(orderRequest));

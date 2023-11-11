@@ -61,7 +61,6 @@ public class CompleteOrderWithCardTransferCommandHandler:
 
          if (resultPayment.Success)
          {
-             // Basket silinecek
              unitOfWork.BasketRepository.Remove(request.Model.BasketId);
              orderRequest.PaymentRefCode = resultPayment.Response.transactionRefNumber;
              await mediator.Send(new CreateOrderCommand(orderRequest));
