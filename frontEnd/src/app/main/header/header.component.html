@@ -6,8 +6,8 @@
       </a>
 
       <a class="py-2 d-none d-md-inline-block" routerLink="/main/product" routerLinkActive="selected" href="#">Product</a>
-      <a class="py-2 d-none d-md-inline-block" routerLink="/main/basket" routerLinkActive="selected" href="#">Basket</a>
-      <a class="py-2 d-none d-md-inline-block" *ngIf="userRole == 'admin'" routerLink="/main/customer" routerLinkActive="selected" href="#">Customer</a>
+      <a class="py-2 d-none d-md-inline-block" *ngIf="userRole == 'Bayi'" routerLink="/main/basket" routerLinkActive="selected" href="#">Basket</a>
+      <a class="py-2 d-none d-md-inline-block" *ngIf="userRole == 'Admin'" routerLink="/main/customer" routerLinkActive="selected" href="#">Customer</a>
       <a class="py-2 d-none d-md-inline-block" routerLink="/main/settings" routerLinkActive="selected" href="#">Settings</a>
       <a class="py-2 d-none d-md-inline-block" routerLink="/main/orders" routerLinkActive="selected" href="#">Orders</a>
       <a class="py-2 d-none d-md-inline-block" routerLink="/main/messages" routerLinkActive="selected"href="#">Messages</a>

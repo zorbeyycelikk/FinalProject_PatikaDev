@@ -2,7 +2,7 @@
 
 <div class="row top-group">
      <!-- Add Product Button -->
-    <button type="button" class="btn btn-outline-dark btn-add" data-toggle="modal" data-target="#addModal" >Add
+    <button type="button" class="btn btn-outline-dark btn-add" data-toggle="modal" data-target="#addModal" *ngIf="userRole == 'Admin'" >Add
         Product</button>
         <!-- Filter Search Bar -->
     <input class="form-control" id="exampleInputEmail1" placeholder="Enter product name to filter "
@@ -14,7 +14,7 @@
     <div *ngFor="let item of product | productFilter:filterText" class="card border-dark mb-3" style="width: 23rem;">
         
         <div class="imgDiv">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/f9/Phoenicopterus_ruber_in_S%C3%A3o_Paulo_Zoo.jpg"
+            <img src= "{{item.imgUrl}}"
             class="card-img-top" alt="...">
         </div>
         <div class="card-body text-dark">
@@ -24,7 +24,7 @@
             <p class="card-text">  Stock : {{item.stock}}</p>
             <p class="card-text">Price : {{item.price}}</p>
 
-            <div *ngIf="userRole == 'bayi'">
+            <div *ngIf="userRole == 'Bayi'">
                 <a href="#" class="btn btn-primary" (click)="addItemToBasket(item.id,$event)">Add To Basket</a>
 
                 <div class="form-group ">
@@ -39,7 +39,7 @@
                 </div>
             </div>
 
-            <div class="buttonGroup" *ngIf="userRole == 'admin'">
+            <div class="buttonGroup" *ngIf="userRole == 'Admin'">
                 <hr>
                 <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#updateModal" (click)="getProductForModal(item)">Update </a>
                 <hr>
